@@ -1,4 +1,5 @@
 import Avatar from "./Avatar";
+import SocialMediaContainer from "./SocialMediaContainer";
 
 export default function Header() {
   return (
@@ -9,6 +10,7 @@ export default function Header() {
       <div>
         <h1 className={"text-xl font-bold"}>Alvaro Falcon Morales</h1>
         <p>Software Engineer</p>
+        <SocialMediaContainer />
       </div>
     </header>
   );
