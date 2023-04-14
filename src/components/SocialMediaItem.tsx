@@ -1,7 +1,9 @@
-export default function SocialMediaItem(props: { icon: any }) {
+export default function SocialMediaItem(props: { icon: any; link: string }) {
   return (
     <div>
-      <img src={props.icon} alt="" />
+      <a href={props.link}>
+        <img src={props.icon} alt="" />
+      </a>
     </div>
   );
 }

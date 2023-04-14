@@ -1,11 +1,12 @@
 import SocialMediaItem from "./SocialMediaItem";
-import { GithubIcon, LinkedinIcon } from "./Icons";
+import data from "../data-source/social.json";
 
 export default function SocialMediaContainer() {
   return (
     <div className={"flex"}>
-      <SocialMediaItem icon={GithubIcon} />
-      <SocialMediaItem icon={LinkedinIcon} />
+      {data.map((item) => {
+        return <SocialMediaItem icon={item.icon} link={item.link} />;
+      })}
     </div>
   );
 }

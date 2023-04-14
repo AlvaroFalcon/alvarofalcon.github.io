@@ -1,5 +1,6 @@
 import Avatar from "./Avatar";
 import SocialMediaContainer from "./SocialMediaContainer";
+import data from "../data-source/header.json";
 
 export default function Header() {
   return (
@@ -10,10 +11,8 @@ export default function Header() {
     >
       <Avatar />
       <div className={"flex-1 flex flex-col justify-center items-center gap-2"}>
-        <h1 className={"text-xl lg:text-5xl font-bold"}>
-          Alvaro Falcon Morales
-        </h1>
-        <p className={"lg:text-3xl"}>Software Engineer</p>
+        <h1 className={"text-xl lg:text-5xl font-bold"}>{data.title}</h1>
+        <p className={"lg:text-3xl"}>{data.subtitle}</p>
         <SocialMediaContainer />
       </div>
     </header>
