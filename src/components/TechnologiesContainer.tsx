@@ -1,11 +1,15 @@
 import TechnologyItem from "./TechnologyItem";
 
 type Props = {
+  className?: string;
   technologyIcons: string[];
 };
-export default function TechnologiesContainer({ technologyIcons }: Props) {
+export default function TechnologiesContainer({
+  technologyIcons,
+  className,
+}: Props) {
   return (
-    <div className={"flex"}>
+    <div className={"flex " + className}>
       {technologyIcons.map((icon) => {
         return <TechnologyItem technologyIcon={icon} />;
       })}

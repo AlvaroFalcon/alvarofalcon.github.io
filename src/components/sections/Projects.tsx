@@ -1,4 +1,5 @@
 import TechnologiesContainer from "../TechnologiesContainer";
+import ProjectItem from "../ProjectItem";
 
 export default function Projects() {
   return (
@@ -7,7 +8,9 @@ export default function Projects() {
         <h1 className={"font-bold text-2xl"}>Projects</h1>
       </div>
       <div className={"flex flex-row w-full"}>
-        <div className={"flex flex-col max-w-[40%] gap-4"}></div>
+        <div className={"flex flex-col max-w-[40%] gap-4"}>
+          <ProjectItem />
+        </div>
       </div>
     </section>
   );
