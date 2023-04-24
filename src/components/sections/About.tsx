@@ -1,5 +1,5 @@
-import data from "../data-source/about.json";
-import TechnologiesContainer from "./TechnologiesContainer";
+import data from "../../data-source/about.json";
+import TechnologiesContainer from "../TechnologiesContainer";
 export default function About() {
   return (
     <section className={"flex w-full p-[5%] justify-between flex-col"}>

@@ -1,4 +1,4 @@
-import TechnologiesContainer from "./TechnologiesContainer";
+import TechnologiesContainer from "../TechnologiesContainer";
 
 export default function Projects() {
   return (

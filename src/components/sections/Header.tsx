@@ -1,6 +1,6 @@
-import Avatar from "./Avatar";
-import SocialMediaContainer from "./SocialMediaContainer";
-import data from "../data-source/header.json";
+import Avatar from "../Avatar";
+import SocialMediaContainer from "../SocialMediaContainer";
+import data from "../../data-source/header.json";
 
 export default function Header() {
   return (
