@@ -8,11 +8,7 @@ const ProfilePic = () => (
 );
 
 const Intro = () => (
-  <p
-    className={
-      "my-5 lg:my-14 text-lg max-w-3xl hover:scale-110 ease-in-out transition-all"
-    }
-  >
+  <p className={"my-5 lg:my-14 text-lg max-w-3xl"}>
     Been diving deep into the software world since 2017, passionate about
     transforming ambitious ideas into tangible, user-friendly products. My
     journey has equipped me with essential skills in{" "}
@@ -50,15 +46,21 @@ export default function Home() {
       render={({ state, fullpageApi }) => {
         return (
           <ReactFullpage.Wrapper>
-            <div className="bg-[#111] text-white section">
+            <div className="bg-[#111] text-white section select-none">
               <div
                 className={
-                  "flex flex-col lg:flex-row justify-between w-[80%] m-auto gap-5 lg:py-0 overflow-hidden"
+                  "flex flex-col lg:flex-row justify-between w-[80%] m-auto gap-5 lg:py-0"
                 }
               >
                 <div className={"flex flex-col gap-1"}>
-                  <PersonalInfo />
-                  <Intro />
+                  <div
+                    className={
+                      "hover:scale-105 ease-in-out transition-all z-30 hover:relative"
+                    }
+                  >
+                    <PersonalInfo />
+                    <Intro />
+                  </div>
                   <div className={"flex gap-5 flex-row-reverse"}>
                     <Button>Resume</Button>
                     <Button>Contact</Button>
