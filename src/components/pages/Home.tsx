@@ -46,22 +46,26 @@ export default function Home() {
       render={({ state, fullpageApi }) => {
         return (
           <ReactFullpage.Wrapper>
-            <div className="bg-[#111] text-white section select-none">
+            <div className="bg-[#111] text-white section select-none py-5 lg:py-0">
               <div
                 className={
-                  "flex flex-col lg:flex-row justify-between w-[80%] m-auto gap-5 lg:py-0"
+                  "flex flex-col-reverse lg:flex-row justify-between w-[80%] m-auto gap-5 lg:py-0"
                 }
               >
                 <div className={"flex flex-col gap-1"}>
                   <div
                     className={
-                      "hover:scale-105 ease-in-out transition-all z-30 hover:relative"
+                      "lg:hover:scale-105 ease-in-out transition-all z-30 hover:relative"
                     }
                   >
                     <PersonalInfo />
                     <Intro />
                   </div>
-                  <div className={"flex gap-5 flex-row-reverse"}>
+                  <div
+                    className={
+                      "flex gap-5 lg:flex-row justify-center lg:justify-end"
+                    }
+                  >
                     <Button>Resume</Button>
                     <Button>Contact</Button>
                   </div>
