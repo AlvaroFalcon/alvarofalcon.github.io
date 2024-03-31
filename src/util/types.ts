@@ -20,4 +20,5 @@ export type PersonalProjectInfo = {
   description: string;
   imageSrc: string;
   technologies: Technology[];
+  link?: string;
 };

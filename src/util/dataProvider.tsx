@@ -1,5 +1,5 @@
-import { ExperienceDescription } from "./types";
-
+import { ExperienceDescription, PersonalProjectInfo } from "./types";
+import bakalendar from "../resources/bakalendar.png";
 export const experience: ExperienceDescription[] = [
   {
     title: "Product Engineer",
@@ -70,6 +70,17 @@ Worked on different projects as a junior software developer supervised by qualif
 - Web application development using Vaadin Java framework
 - API development with Spring (Java)
 `,
+  },
+];
+
+export const projects: PersonalProjectInfo[] = [
+  {
+    title: "BaKalendar",
+    description:
+      "Your friendly anime companion! Crafted with love in Kotlin using the MVVM pattern, it's the go-to app for keeping track of all the anime magic unfolding right now. With BaKalendar, you're always in the loop with the latest episodes and updates on your favorite shows. Let's start watching together!",
+    imageSrc: bakalendar,
+    technologies: ["kotlin"],
+    link: "https://play.google.com/store/apps/details?id=com.frostfel.animelist&hl=en_US",
   },
 ];
 

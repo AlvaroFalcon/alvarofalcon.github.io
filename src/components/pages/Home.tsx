@@ -1,9 +1,14 @@
 import ReactFullpage from "@fullpage/react-fullpage";
 import React from "react";
 import profilePic from "../../resources/main.png";
-import { experience, formatArrayInBlocks } from "../../util/dataProvider";
+import {
+  experience,
+  formatArrayInBlocks,
+  projects,
+} from "../../util/dataProvider";
 import Button from "../Button";
 import ExperienceBlock from "../ExperienceBlock";
+import { PersonalProjectBlock } from "../PersonalProjectBlock";
 
 const ProfilePic = () => (
   <img className={"rounded-md"} src={profilePic} alt="" />
@@ -94,11 +99,17 @@ const ExperienceSection = () => (
 );
 
 const renderMyProjects = () => {
-  return <div>{}</div>;
+  return (
+    <div>
+      {projects.map((project) => {
+        return <PersonalProjectBlock project={project} />;
+      })}
+    </div>
+  );
 };
 const MyProjectsSection = () => (
   <div className="bg-[#111] text-white section select-none">
-    <div className={"flex h-full w-[80%] m-auto flex-col"}>
+    <div className={"flex m-auto h-full w-[80%] flex-col"}>
       <div className={"m-auto flex flex-col gap-5 lg:gap-20"}>
         <p className={"text-green-500 font-bold text-2xl lg:text-6xl"}>
           Personal Projects
