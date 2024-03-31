@@ -39,13 +39,13 @@ const PersonalInfo = () => (
     </h2>
   </>
 );
-
+const isMobile = () => window.innerWidth <= 768;
 const renderExperienceBlocks = () => {
-  return formatArrayInBlocks(experience, 2).map((exp, index) => {
+  return formatArrayInBlocks(experience, 2, isMobile()).map((exp, index) => {
     return (
       <div
         className={
-          "slide [&>div]:h-full [&>div>div]:pb-[5rem] lg:[&>div>div]:pb-[0] "
+          "slide [&>div]:h-full [&>div>div]:pb-[6rem] lg:[&>div>div]:pb-[0] "
         }
       >
         <div className={"flex h-full flex-col lg:flex-row  gap-5"}>
@@ -86,7 +86,7 @@ const PresentationSection = () => (
 );
 
 const ExperienceSection = () => (
-  <div className="bg-[#111] text-white section select-none">
+  <div className="bg-[#111] text-white section select-none fp-auto-height">
     <div className={"flex h-full w-[80%] m-auto flex-col"}>
       <div className={"m-auto flex flex-col gap-5 lg:gap-20"}>
         <p className={"text-green-500 font-bold text-2xl lg:text-6xl"}>

@@ -6,7 +6,7 @@ export const PersonalProjectBlock = ({
   project: PersonalProjectInfo;
 }) => {
   return (
-    <div className={"p-5 w-max-[30%] max-w-[33%] flex flex-col gap-5"}>
+    <div className={"p-5 lg:max-w-[33%] flex flex-col gap-5"}>
       <p className={"text-white text-2xl font-bold"}>{project.title}</p>
       <img
         className={"w-full h-[300px] object-cover"}

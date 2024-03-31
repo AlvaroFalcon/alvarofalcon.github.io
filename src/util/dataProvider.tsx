@@ -84,12 +84,18 @@ export const projects: PersonalProjectInfo[] = [
   },
 ];
 
-export const formatArrayInBlocks = (array: any[], blocks: number) =>
-  array.reduce<any[][]>((acc, exp, index) => {
-    if (index % blocks === 0) {
+export const formatArrayInBlocks = (
+  array: any[],
+  blocks: number,
+  isMobile: boolean
+) => {
+  const blocksToUse = isMobile ? 1 : blocks;
+  return array.reduce<any[][]>((acc, exp, index) => {
+    if (index % blocksToUse === 0) {
       acc.push([exp]);
     } else {
       acc[acc.length - 1].push(exp);
     }
     return acc;
   }, []);
+};
