@@ -14,3 +14,10 @@ export type Technology =
   | "react"
   | "nodejs"
   | "kotlin";
+
+export type PersonalProjectInfo = {
+  title: string;
+  description: string;
+  imageSrc: string;
+  technologies: Technology[];
+};

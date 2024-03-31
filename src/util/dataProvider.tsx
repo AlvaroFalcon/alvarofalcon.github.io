@@ -73,9 +73,9 @@ Worked on different projects as a junior software developer supervised by qualif
   },
 ];
 
-export const formatExperienceArray = () =>
-  experience.reduce<ExperienceDescription[][]>((acc, exp, index) => {
-    if (index % 2 === 0) {
+export const formatArrayInBlocks = (array: any[], blocks: number) =>
+  array.reduce<any[][]>((acc, exp, index) => {
+    if (index % blocks === 0) {
       acc.push([exp]);
     } else {
       acc[acc.length - 1].push(exp);

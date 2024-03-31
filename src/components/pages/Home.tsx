@@ -1,7 +1,7 @@
 import ReactFullpage from "@fullpage/react-fullpage";
 import React from "react";
 import profilePic from "../../resources/main.png";
-import { formatExperienceArray } from "../../util/dataProvider";
+import { experience, formatArrayInBlocks } from "../../util/dataProvider";
 import Button from "../Button";
 import ExperienceBlock from "../ExperienceBlock";
 
@@ -36,7 +36,7 @@ const PersonalInfo = () => (
 );
 
 const renderExperienceBlocks = () => {
-  return formatExperienceArray().map((exp, index) => {
+  return formatArrayInBlocks(experience, 2).map((exp, index) => {
     return (
       <div
         className={
@@ -93,6 +93,26 @@ const ExperienceSection = () => (
   </div>
 );
 
+const renderMyProjects = () => {
+  return <div>{}</div>;
+};
+const MyProjectsSection = () => (
+  <div className="bg-[#111] text-white section select-none">
+    <div className={"flex h-full w-[80%] m-auto flex-col"}>
+      <div className={"m-auto flex flex-col gap-5 lg:gap-20"}>
+        <p className={"text-green-500 font-bold text-2xl lg:text-6xl"}>
+          Personal Projects
+        </p>
+        <div className={"flex gap-5"}>{renderMyProjects()}</div>
+      </div>
+    </div>
+  </div>
+);
+const ContactSection = () => (
+  <div className="section bg-[#111]">
+    <p>Contact</p>
+  </div>
+);
 export default function Home() {
   return (
     <ReactFullpage
@@ -108,15 +128,8 @@ export default function Home() {
           <ReactFullpage.Wrapper>
             <PresentationSection />
             <ExperienceSection />
-            <div className="section bg-[#111]">
-              <p>Section 3</p>
-            </div>
-            <div className="section">
-              <p>Section 4</p>
-            </div>
-            <div className="section">
-              <p>Section 5</p>
-            </div>
+            <MyProjectsSection />
+            <ContactSection />
           </ReactFullpage.Wrapper>
         );
       }}
