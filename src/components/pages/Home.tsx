@@ -1,7 +1,9 @@
 import ReactFullpage from "@fullpage/react-fullpage";
 import React from "react";
 import profilePic from "../../resources/main.png";
+import { formatExperienceArray } from "../../util/dataProvider";
 import Button from "../Button";
+import ExperienceBlock from "../ExperienceBlock";
 
 const ProfilePic = () => (
   <img className={"rounded-md"} src={profilePic} alt="" />
@@ -24,13 +26,71 @@ const Intro = () => (
 
 const PersonalInfo = () => (
   <>
-    <h1 className={"font-bold text-2xl sm:text-4xl md:text-4xlxl lg:text-7xl"}>
+    <h1 className={"font-bold text-2xl sm:text-4xl md:text-4xl lg:text-7xl"}>
       Hello! Im <span className={"text-green-400"}>Alvaro</span>
     </h1>
     <h2 className={"text-xl sm:text-2xl lg:text-4xl"}>
       and I'm a <span className={"text-green-400"}>Software Engineer</span>
     </h2>
   </>
+);
+
+const renderExperienceBlocks = () => {
+  return formatExperienceArray().map((exp, index) => {
+    return (
+      <div
+        className={
+          "slide [&>div]:h-full [&>div>div]:pb-[5rem] lg:[&>div>div]:pb-[0] "
+        }
+      >
+        <div className={"flex h-full flex-col lg:flex-row  gap-5"}>
+          {exp.map((exp, index) => (
+            <ExperienceBlock {...exp} />
+          ))}
+        </div>
+      </div>
+    );
+  });
+};
+
+const PresentationSection = () => (
+  <div className="bg-[#111] text-white section select-none py-5 lg:py-0">
+    <div
+      className={
+        "flex flex-col-reverse lg:flex-row justify-between w-[80%] m-auto gap-5 lg:py-0"
+      }
+    >
+      <div className={"flex flex-col gap-1"}>
+        <div
+          className={
+            "lg:hover:scale-105 ease-in-out transition-all z-30 hover:relative"
+          }
+        >
+          <PersonalInfo />
+          <Intro />
+        </div>
+        <div className={"flex gap-5 lg:flex-row justify-center lg:justify-end"}>
+          <Button>Resume</Button>
+          <Button>Contact</Button>
+        </div>
+      </div>
+
+      <ProfilePic />
+    </div>
+  </div>
+);
+
+const ExperienceSection = () => (
+  <div className="bg-[#111] text-white section select-none">
+    <div className={"flex h-full w-[80%] m-auto flex-col"}>
+      <div className={"m-auto flex flex-col gap-5 lg:gap-20"}>
+        <p className={"text-green-500 font-bold text-2xl lg:text-6xl"}>
+          My experience so far
+        </p>
+        <div className={"flex gap-5"}>{renderExperienceBlocks()}</div>
+      </div>
+    </div>
+  </div>
 );
 
 export default function Home() {
@@ -46,36 +106,9 @@ export default function Home() {
       render={({ state, fullpageApi }) => {
         return (
           <ReactFullpage.Wrapper>
-            <div className="bg-[#111] text-white section select-none py-5 lg:py-0">
-              <div
-                className={
-                  "flex flex-col-reverse lg:flex-row justify-between w-[80%] m-auto gap-5 lg:py-0"
-                }
-              >
-                <div className={"flex flex-col gap-1"}>
-                  <div
-                    className={
-                      "lg:hover:scale-105 ease-in-out transition-all z-30 hover:relative"
-                    }
-                  >
-                    <PersonalInfo />
-                    <Intro />
-                  </div>
-                  <div
-                    className={
-                      "flex gap-5 lg:flex-row justify-center lg:justify-end"
-                    }
-                  >
-                    <Button>Resume</Button>
-                    <Button>Contact</Button>
-                  </div>
-                </div>
-
-                <ProfilePic />
-              </div>
-            </div>
-            <div className="section"></div>
-            <div className="section">
+            <PresentationSection />
+            <ExperienceSection />
+            <div className="section bg-[#111]">
               <p>Section 3</p>
             </div>
             <div className="section">
