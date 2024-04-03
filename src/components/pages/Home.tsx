@@ -7,6 +7,7 @@ import {
   projects,
 } from "../../util/dataProvider";
 import Button from "../Button";
+import ContactForm from "../ContactForm";
 import ExperienceBlock from "../ExperienceBlock";
 import { PersonalProjectBlock } from "../PersonalProjectBlock";
 
@@ -126,6 +127,7 @@ const MyProjectsSection = () => (
 const ContactSection = () => (
   <div className="section bg-[#111]">
     <p>Contact</p>
+    <ContactForm />
   </div>
 );
 export default function Home() {
