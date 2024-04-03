@@ -86,7 +86,11 @@ const PresentationSection = () => (
 );
 
 const ExperienceSection = () => (
-  <div className="bg-[#111] text-white section select-none fp-auto-height">
+  <div
+    className={`bg-[#111] text-white section select-none  ${
+      isMobile() ? "fp-auto-height" : ""
+    }`}
+  >
     <div className={"flex h-full w-[80%] m-auto flex-col"}>
       <div className={"m-auto flex flex-col gap-5 lg:gap-20"}>
         <p className={"text-green-500 font-bold text-2xl lg:text-6xl"}>
