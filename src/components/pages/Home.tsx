@@ -125,9 +125,11 @@ const MyProjectsSection = () => (
   </div>
 );
 const ContactSection = () => (
-  <div className="section bg-[#111]">
-    <p>Contact</p>
-    <ContactForm />
+  <div className="section bg-[#111] text-white select-none h-full">
+    <div className="flex m-auto h-full w-[80%] flex-col gap-5">
+      <p className={"text-green-500 font-bold text-2xl lg:text-6xl"}>Contact</p>
+      <ContactForm />
+    </div>
   </div>
 );
 export default function Home() {
