@@ -45,13 +45,16 @@ const renderExperienceBlocks = () => {
   return formatArrayInBlocks(experience, 2, isMobile()).map((exp, index) => {
     return (
       <div
+        key={`experience-${index}`}
         className={
           "slide [&>div]:h-full [&>div>div]:pb-[6rem] lg:[&>div>div]:pb-[0] "
         }
       >
         <div className={"flex h-full flex-col lg:flex-row  gap-5"}>
           {exp.map((exp, index) => (
-            <ExperienceBlock {...exp} />
+            <div key={`experience-block-${index}`}>
+              <ExperienceBlock {...exp} />
+            </div>
           ))}
         </div>
       </div>
@@ -112,8 +115,12 @@ const ExperienceSection = () => (
 const renderMyProjects = () => {
   return (
     <div>
-      {projects.map((project) => {
-        return <PersonalProjectBlock project={project} />;
+      {projects.map((project, index) => {
+        return (
+          <div key={`personal-project-${index}`}>
+            <PersonalProjectBlock project={project} />
+          </div>
+        );
       })}
     </div>
   );
