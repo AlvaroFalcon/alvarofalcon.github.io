@@ -1,4 +1,4 @@
-import ReactFullpage from "@fullpage/react-fullpage";
+import ReactFullpage, { fullpageApi } from "@fullpage/react-fullpage";
 import React from "react";
 import profilePic from "../../resources/main.png";
 import {
@@ -59,7 +59,7 @@ const renderExperienceBlocks = () => {
   });
 };
 
-const PresentationSection = () => (
+const PresentationSection = ({ moveTo }: fullpageApi) => (
   <div className="bg-[#111] text-white section select-none py-5 lg:py-0">
     <div
       className={
@@ -77,7 +77,13 @@ const PresentationSection = () => (
         </div>
         <div className={"flex gap-5 lg:flex-row justify-center lg:justify-end"}>
           <Button>Resume</Button>
-          <Button>Contact</Button>
+          <Button
+            onClick={() => {
+              moveTo(4);
+            }}
+          >
+            Contact
+          </Button>
         </div>
       </div>
 
@@ -140,12 +146,12 @@ export default function Home() {
         position: "left",
         enabled: true,
       }}
-      licenseKey={""}
+      licenseKey={"gplv3-license"}
       scrollingSpeed={1000}
       render={({ state, fullpageApi }) => {
         return (
           <ReactFullpage.Wrapper>
-            <PresentationSection />
+            <PresentationSection {...fullpageApi} />
             <ExperienceSection />
             <MyProjectsSection />
             <ContactSection />
