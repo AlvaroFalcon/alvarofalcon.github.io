@@ -70,16 +70,14 @@ const PresentationSection = ({ moveTo }: fullpageApi) => (
       }
     >
       <div className={"flex flex-col gap-1"}>
-        <div
-          className={
-            "lg:hover:scale-105 ease-in-out transition-all z-30 hover:relative"
-          }
-        >
+        <div>
           <PersonalInfo />
           <Intro />
         </div>
         <div className={"flex gap-5 lg:flex-row justify-center lg:justify-end"}>
-          <Button>Resume</Button>
+          <a href="/alvaro_cv.pdf" download>
+            <Button>Resume</Button>
+          </a>
           <Button
             onClick={() => {
               moveTo(4);
