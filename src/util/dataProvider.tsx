@@ -7,11 +7,13 @@ export const experience: ExperienceDescription[] = [
     startDate: "2023",
     subtitle: "Sigma Financial AI",
     description: `
-During my time working for Triller, I have been:
+Joined as one of the initial developers, contributing to the continuous growth and refinement of the project.
+- Developed new functionalities based on requirements and resolved bugs impacting product performance.
+- Engaged in backend tasks for implementing new features and addressing issues.
+- Implemented unit testing with Jest and React-testing-tools to enhance code coverage.
+- Ensured high quality UI/UX design, focusing on precision and responsiveness.
+- Created multiple storybook stories for new and old components.
 
-- Developing new features and improving already implemented features like Analytics
-- Ensuring all features are done in time
-- Bugfixing the errors that come to the app.
 `,
   },
   {
