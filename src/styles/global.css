@@ -1,0 +1,14 @@
+/* Estilos globales y clases CSS personalizadas */
+
+/* Ejemplo de clase personalizada */
+.custom-class {
+	/* Tus estilos aquí */
+}
+
+/* Puedes combinar Tailwind con CSS personalizado */
+.nav-link {
+	@apply text-sm text-black;	
+}
+.nav-title {
+	@apply text-2xl text-black font-bold;
+}
