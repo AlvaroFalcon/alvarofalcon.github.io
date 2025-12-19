@@ -1,7 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap');
+
 :root {
   --navbar: 5rem;
   --navbar-mobile: 2rem;
   --foreground: 220 3.7% 15.9%;
+  font-family: 'Space Mono', monospace;
 }
 
 .navbar {
@@ -11,7 +14,7 @@
   
 }
 .nav-link {
-	@apply text-sm text-gray-500;
+	@apply text-xl text-gray-500;
 	transition: text-shadow 0.2s ease;
 }
 
@@ -20,7 +23,7 @@
 }
 
 .nav-title {
-	@apply text-2xl text-black font-bold;
+	@apply text-3xl text-black font-bold;
 }
 .header {
 	@apply min-h-screen w-full bg-black absolute top-0 left-0 right-0;
@@ -56,3 +59,8 @@
   @apply   w-full md:w-4/5 object-cover self-end;  
   box-shadow: 2px 2px 0 1px rgb(255, 0, 0), -2px -2px 0 1px rgb(0, 0, 0);  
 }
+
+h1, h2 {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
