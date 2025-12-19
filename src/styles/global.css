@@ -11,8 +11,14 @@
   
 }
 .nav-link {
-	@apply text-sm text-black;	
+	@apply text-sm text-gray-500;
+	transition: text-shadow 0.2s ease;
 }
+
+.nav-link:hover {
+	text-shadow: 1px 1px 0 rgb(255, 0, 0);
+}
+
 .nav-title {
 	@apply text-2xl text-black font-bold;
 }
