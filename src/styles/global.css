@@ -1,9 +1,3 @@
-/* Estilos globales y clases CSS personalizadas */
-
-/* Ejemplo de clase personalizada */
-.custom-class {
-	/* Tus estilos aquí */
-}
 :root {
   --navbar: 5rem;
   --navbar-mobile: 2rem;
