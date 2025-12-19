@@ -1,24 +1,18 @@
-<nav
-	id="navbar"
-	class="p-8 sticky top-0 z-10 transition-colors duration-300 flex justify-between items-center"
->
+<nav id="navbar" class="navbar">
 	<div>
 		<a href="/">
 			<h1 class="nav-title">Alvaro Falcón.</h1>
 		</a>
 	</div>
 
-	<!-- Menú desktop (oculto en móvil) -->
 	<div class="hidden md:flex gap-4">
 		<a href="/"> <h1 class="nav-link">ABOUT</h1></a>
 		<a href="/"> <h1 class="nav-link">PROJECTS</h1></a>
 		<a href="/"> <h1 class="nav-link">CONTACT</h1></a>
 	</div>
 
-	<!-- Checkbox oculto para controlar el menú móvil -->
 	<input type="checkbox" id="menu-toggle" class="hidden" />
 
-	<!-- Botón hamburguesa (solo visible en móvil) -->
 	<label
 		for="menu-toggle"
 		class="md:hidden cursor-pointer flex flex-col gap-1.5 z-20"
@@ -28,7 +22,6 @@
 		<span class="hamburger-line"></span>
 	</label>
 
-	<!-- Menú móvil desplegable -->
 	<div class="mobile-menu">
 		<div class="mobile-menu-content">
 			<a href="/" class="mobile-link">ABOUT</a>
@@ -42,7 +35,7 @@
 	.hamburger-line {
 		width: 25px;
 		height: 3px;
-		background-color: currentColor;
+		background-color: black;
 		transition: all 0.3s ease;
 		transform-origin: center;
 	}
