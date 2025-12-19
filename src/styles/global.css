@@ -7,6 +7,7 @@
 :root {
   --navbar: 5rem;
   --navbar-mobile: 2rem;
+  --foreground: 220 3.7% 15.9%;
 }
 
 .navbar {
@@ -23,4 +24,35 @@
 }
 .header {
 	@apply min-h-screen w-full bg-black absolute top-0 left-0 right-0;
+}
+
+.speed-lines {
+  background: repeating-linear-gradient(90deg,
+      transparent,
+      transparent 8px,
+      hsl(var(--foreground) / 0.1) 8px,
+      hsl(var(--foreground) / 0.1) 9px);
+}
+
+.halftone {
+  background-image: radial-gradient(hsl(var(--foreground) / 0.15) 1px,
+      transparent 1px);
+  background-size: 4px 4px;
+}
+
+.title {
+  text-shadow: 3px 3px 0 rgb(255, 0, 0);
+  font-size: 3rem;
+  @apply md:text-8xl;
+}
+
+.subtitle {
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 3px 3px 0 rgb(255, 0, 0);
+    font-size: 1.5rem;
+    @apply md:text-6xl;
+}
+
+.profile-pic {
+  @apply   w-full md:w-4/5 object-cover self-end;  
+  box-shadow: 2px 2px 0 1px rgb(255, 0, 0), -2px -2px 0 1px rgb(0, 0, 0);  
 }
