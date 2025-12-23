@@ -46,14 +46,20 @@
   background-size: 4px 4px;
 }
 
-.title {
-  text-shadow: 3px 3px 0 rgb(255, 0, 0);
+.title {  
+  @apply shadowed-title;
   font-size: 3rem;
   @apply md:text-8xl;
 }
+.shadowed-title {
+  text-shadow: 3px 3px 0 rgb(255, 0, 0);
+}
+.shadowed-subtitle {
+  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 3px 3px 0 rgb(255, 0, 0);
+}
 
 .subtitle {
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 3px 3px 0 rgb(255, 0, 0);
+   @apply shadowed-subtitle;
     font-size: 1.5rem;
     @apply md:text-6xl;
 }
