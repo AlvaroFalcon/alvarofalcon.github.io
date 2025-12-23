@@ -28,6 +28,9 @@
 .header {
 	@apply min-h-screen w-full bg-black absolute top-0 left-0 right-0;
 }
+.header-inner {
+	@apply pt-[var(--navbar)]
+}
 
 .speed-lines {
   background: repeating-linear-gradient(90deg,
