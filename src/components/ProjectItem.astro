@@ -2,26 +2,35 @@
 interface Props {
 	title: string;
 	description: string;
+	type: string;
+	href: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, href, type } = Astro.props;
 ---
 
-<div class="group">
+<a href={href} class="group">
 	<div
 		class="bg-white w-full relative manga-border group-hover:bg-black transition-colors duration-200"
 	>
 		<div class="speed-lines p-8">
-			<h3
-				class="text-4xl group-hover:text-white transition-colors duration-200"
-			>
-				{title}
-			</h3>
+			<div class="flex justify-between items-center">
+				<h3
+					class="text-4xl group-hover:text-white transition-colors duration-200"
+				>
+					{title}
+				</h3>
+				<h4
+					class="text-xl group-hover:text-white transition-colors duration-200"
+				>
+					{type}
+				</h4>
+			</div>
 		</div>
 	</div>
 	<h4
-		class="text-gray-500 opacity-0 max-h-0 overflow-hidden group-hover:opacity-100 group-hover:max-h-96 transition-all duration-200"
+		class="m-0 group-hover:m-4 text-gray-500 opacity-0 max-h-0 overflow-hidden group-hover:opacity-100 group-hover:max-h-96 transition-all duration-200"
 	>
 		{description}
 	</h4>
-</div>
+</a>
