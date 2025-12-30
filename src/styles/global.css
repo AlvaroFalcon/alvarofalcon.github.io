@@ -64,6 +64,10 @@
     @apply md:text-6xl;
 }
 
+.manga-border {
+  @apply border-2 border-black;
+}
+
 .profile-pic {
   @apply m-auto md:m-0 w-full h-auto md:w-4/5 object-contain object-top self-end;  
   box-shadow: 2px 2px 0 1px rgb(255, 0, 0), -2px -2px 0 1px rgb(0, 0, 0);
@@ -71,7 +75,7 @@
   max-height: 100%;
 }
 
-h1, h2 {
+h1, h2, h3 {
   font-family: 'Bebas Neue', sans-serif;
 }
 
