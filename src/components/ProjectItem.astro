@@ -1,0 +1,27 @@
+---
+interface Props {
+	title: string;
+	description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<div class="group">
+	<div
+		class="bg-white w-full relative manga-border group-hover:bg-black transition-colors duration-200"
+	>
+		<div class="speed-lines p-8">
+			<h3
+				class="text-4xl group-hover:text-white transition-colors duration-200"
+			>
+				{title}
+			</h3>
+		</div>
+	</div>
+	<h4
+		class="text-gray-500 opacity-0 max-h-0 overflow-hidden group-hover:opacity-100 group-hover:max-h-96 transition-all duration-200"
+	>
+		{description}
+	</h4>
+</div>
