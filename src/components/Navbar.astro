@@ -6,9 +6,9 @@
 	</div>
 
 	<div class="hidden md:flex gap-4">
-		<a href="/"> <h1 class="nav-link">ABOUT</h1></a>
-		<a href="/"> <h1 class="nav-link">PROJECTS</h1></a>
-		<a href="/"> <h1 class="nav-link">CONTACT</h1></a>
+		<a href="#about"> <h1 class="nav-link">ABOUT</h1></a>
+		<a href="#projects"> <h1 class="nav-link">PROJECTS</h1></a>
+		<a href="#connect"> <h1 class="nav-link">CONTACT</h1></a>
 	</div>
 
 	<input type="checkbox" id="menu-toggle" class="hidden" />
@@ -24,9 +24,9 @@
 
 	<div class="mobile-menu">
 		<div class="mobile-menu-content">
-			<a href="/" class="mobile-link">ABOUT</a>
-			<a href="/" class="mobile-link">PROJECTS</a>
-			<a href="/" class="mobile-link">CONTACT</a>
+			<a href="#about" class="mobile-link">ABOUT</a>
+			<a href="#projects" class="mobile-link">PROJECTS</a>
+			<a href="#connect" class="mobile-link">CONTACT</a>
 		</div>
 	</div>
 </nav>
@@ -115,4 +115,16 @@
 
 	window.addEventListener("scroll", handleScroll);
 	handleScroll();
+
+	// Cerrar el menú móvil al hacer clic en un enlace
+	const menuToggle = document.getElementById("menu-toggle");
+	const mobileLinks = document.querySelectorAll(".mobile-link");
+	
+	mobileLinks.forEach((link) => {
+		link.addEventListener("click", () => {
+			if (menuToggle) {
+				menuToggle.checked = false;
+			}
+		});
+	});
 </script>
