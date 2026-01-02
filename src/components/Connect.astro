@@ -1,0 +1,36 @@
+---
+import Button from "./Button.astro";
+import SocialItem from "./SocialItem.astro";
+---
+
+<div class="bg-white w-full relative flex flex-col">
+	<div class="section-container flex flex-col gap-4">
+		<div class="flex flex-row md:flex-col gap-4 md:gap-2">
+			<h3 class="text-5xl md:text-7xl shadowed-title">Let's</h3>
+			<h3 class="text-5xl md:text-7xl text-white shadowed-subtitle">Connect</h3>
+		</div>
+		<div class="bg-black w-full p-8 flex flex-col gap-8">
+			<p class="text-gray-400 text-base">
+				Whether you have a project in mind, a question, or just want to connect,
+				don't hesitate to reach out.
+			</p>
+
+			<Button
+				variant="ghost"
+				href="mailto:alvaro.falconm93@gmail.com"
+				class="text-white px-0 font-bold"
+			>
+				<span class="text-white text-2xl md:text-3xl font-bebas">
+					ALVARO.FALCONM93@GMAIL.COM
+				</span>
+			</Button>
+		</div>
+		<div class="space-x-4">
+			<SocialItem
+				title="LinkedIn"
+				href="https://www.linkedin.com/in/alvaro-falc%C3%B3n-morales-158a3b128/"
+			/>
+			<SocialItem title="GitHub" href="https://github.com/AlvaroFalcon" />
+		</div>
+	</div>
+</div>

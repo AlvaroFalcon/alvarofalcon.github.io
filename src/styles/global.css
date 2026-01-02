@@ -81,6 +81,10 @@
   @apply m-auto w-full md:w-9/12  space-y-4 p-8;
 }
 
+.font-bebas {
+  font-family: 'Bebas Neue', sans-serif;
+}
+
 h1, h2, h3 {
   font-family: 'Bebas Neue', sans-serif;
 }
