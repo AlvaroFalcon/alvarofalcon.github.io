@@ -13,24 +13,26 @@ const uniqueId = `project-${Math.random().toString(36).substr(2, 9)}`;
 ---
 
 <div class="project-item-container group" data-project-id={uniqueId}>
-	<div
-		class="project-header bg-white w-full relative manga-border group-hover:bg-black transition-colors duration-200 cursor-pointer"
-	>
-		<div class="speed-lines p-8">
-			<div class="flex justify-between items-center">
-				<h3
-					class="text-4xl group-hover:text-white transition-colors duration-200"
-				>
-					{title}
-				</h3>
-				<h4
-					class="text-xl group-hover:text-white transition-colors duration-200"
-				>
-					{type}
-				</h4>
+	<a href={href} class="project-header-link block" data-href={href}>
+		<div
+			class="project-header bg-white w-full relative manga-border group-hover:bg-black transition-colors duration-200 cursor-pointer"
+		>
+			<div class="speed-lines p-8">
+				<div class="flex justify-between items-center">
+					<h3
+						class="text-4xl group-hover:text-white transition-colors duration-200"
+					>
+						{title}
+					</h3>
+					<h4
+						class="text-xl group-hover:text-white transition-colors duration-200"
+					>
+						{type}
+					</h4>
+				</div>
 			</div>
 		</div>
-	</div>
+	</a>
 	<div
 		class="project-description m-0 md:group-hover:m-4 text-gray-500 opacity-0 max-h-0 overflow-hidden md:group-hover:opacity-100 md:group-hover:max-h-96 transition-all duration-200 whitespace-pre-line"
 	>
@@ -69,10 +71,14 @@ const uniqueId = `project-${Math.random().toString(36).substr(2, 9)}`;
 		}
 	}
 
-	@media (min-width: 768px) {
-		.project-header {
-			cursor: default;
-		}
+	.project-header-link {
+		text-decoration: none;
+		color: inherit;
+		display: block;
+	}
+
+	.project-header-link:hover {
+		text-decoration: none;
 	}
 </style>
 
@@ -84,8 +90,6 @@ const uniqueId = `project-${Math.random().toString(36).substr(2, 9)}`;
 		(window as any).projectItemsInitialized = true;
 
 		function initProjectItems() {
-			if (window.innerWidth > 767) return;
-
 			const projectContainers = document.querySelectorAll("[data-project-id]");
 
 			projectContainers.forEach((container) => {
@@ -93,14 +97,18 @@ const uniqueId = `project-${Math.random().toString(36).substr(2, 9)}`;
 				if (htmlElement.dataset.initialized === "true") return;
 				htmlElement.dataset.initialized = "true";
 
-				const header = container.querySelector(".project-header");
-				if (!header) return;
-
-				header.addEventListener("click", (e) => {
-					e.preventDefault();
-					e.stopPropagation();
-					container.classList.toggle("expanded");
-				});
+				const headerLink = container.querySelector(
+					".project-header-link"
+				) as HTMLAnchorElement;
+				if (!headerLink) return;
+				
+				if (window.innerWidth <= 767) {
+					headerLink.addEventListener("click", (e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						container.classList.toggle("expanded");
+					});
+				}				
 			});
 		}
 
@@ -113,7 +121,15 @@ const uniqueId = `project-${Math.random().toString(36).substr(2, 9)}`;
 		let resizeTimer: ReturnType<typeof setTimeout>;
 		window.addEventListener("resize", () => {
 			clearTimeout(resizeTimer);
-			resizeTimer = setTimeout(initProjectItems, 250);
+			resizeTimer = setTimeout(() => {
+				const projectContainers =
+					document.querySelectorAll("[data-project-id]");
+				projectContainers.forEach((container) => {
+					const htmlElement = container as HTMLElement;
+					htmlElement.dataset.initialized = "false";
+				});
+				initProjectItems();
+			}, 250);
 		});
 	}
 </script>
