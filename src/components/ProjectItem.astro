@@ -1,0 +1,135 @@
+---
+import Button from "./Button.astro";
+
+interface Props {
+	title: string;
+	description: string;
+	type: string;
+	href: string;
+}
+
+const { title, description, href, type } = Astro.props;
+const uniqueId = `project-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div class="project-item-container group" data-project-id={uniqueId}>
+	<a href={href} class="project-header-link block" data-href={href}>
+		<div
+			class="project-header bg-white w-full relative manga-border group-hover:bg-black transition-colors duration-200 cursor-pointer"
+		>
+			<div class="speed-lines p-8">
+				<div class="flex justify-between items-center">
+					<h3
+						class="text-4xl group-hover:text-white transition-colors duration-200"
+					>
+						{title}
+					</h3>
+					<h4
+						class="text-xl group-hover:text-white transition-colors duration-200"
+					>
+						{type}
+					</h4>
+				</div>
+			</div>
+		</div>
+	</a>
+	<div
+		class="project-description m-0 md:group-hover:m-4 text-gray-500 opacity-0 max-h-0 overflow-hidden md:group-hover:opacity-100 md:group-hover:max-h-96 transition-all duration-200 whitespace-pre-line"
+	>
+		{description}
+		<div class="mt-4 md:hidden" onclick="event.stopPropagation()">
+			<Button variant="outline" href={href}> View Project → </Button>
+		</div>
+	</div>
+</div>
+
+<style>
+	@media (max-width: 767px) {
+		.project-description {
+			opacity: 0 !important;
+			max-height: 0 !important;
+			margin: 0 !important;
+		}
+
+		.project-item-container.expanded .project-description {
+			opacity: 1 !important;
+			max-height: 5000px !important;
+			margin: 1rem 0 !important;
+		}
+
+		.project-item-container.expanded .project-description > div {
+			padding-bottom: 0.5rem;
+		}
+
+		.project-item-container.expanded .project-header {
+			background-color: black;
+		}
+
+		.project-item-container.expanded .project-header h3,
+		.project-item-container.expanded .project-header h4 {
+			color: white;
+		}
+	}
+
+	.project-header-link {
+		text-decoration: none;
+		color: inherit;
+		display: block;
+	}
+
+	.project-header-link:hover {
+		text-decoration: none;
+	}
+</style>
+
+<script>
+	if (
+		typeof window !== "undefined" &&
+		!(window as any).projectItemsInitialized
+	) {
+		(window as any).projectItemsInitialized = true;
+
+		function initProjectItems() {
+			const projectContainers = document.querySelectorAll("[data-project-id]");
+
+			projectContainers.forEach((container) => {
+				const htmlElement = container as HTMLElement;
+				if (htmlElement.dataset.initialized === "true") return;
+				htmlElement.dataset.initialized = "true";
+
+				const headerLink = container.querySelector(
+					".project-header-link"
+				) as HTMLAnchorElement;
+				if (!headerLink) return;
+				
+				if (window.innerWidth <= 767) {
+					headerLink.addEventListener("click", (e) => {
+						e.preventDefault();
+						e.stopPropagation();
+						container.classList.toggle("expanded");
+					});
+				}				
+			});
+		}
+
+		if (document.readyState === "loading") {
+			document.addEventListener("DOMContentLoaded", initProjectItems);
+		} else {
+			initProjectItems();
+		}
+
+		let resizeTimer: ReturnType<typeof setTimeout>;
+		window.addEventListener("resize", () => {
+			clearTimeout(resizeTimer);
+			resizeTimer = setTimeout(() => {
+				const projectContainers =
+					document.querySelectorAll("[data-project-id]");
+				projectContainers.forEach((container) => {
+					const htmlElement = container as HTMLElement;
+					htmlElement.dataset.initialized = "false";
+				});
+				initProjectItems();
+			}, 250);
+		});
+	}
+</script>
