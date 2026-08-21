@@ -117,7 +117,9 @@
 	handleScroll();
 
 	// Cerrar el menú móvil al hacer clic en un enlace
-	const menuToggle = document.getElementById("menu-toggle");
+	const menuToggle = document.getElementById(
+		"menu-toggle"
+	) as HTMLInputElement | null;
 	const mobileLinks = document.querySelectorAll(".mobile-link");
 	
 	mobileLinks.forEach((link) => {

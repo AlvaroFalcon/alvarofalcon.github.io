@@ -2,6 +2,9 @@
 node_modules
 .pnpm-store
 
+# Design handoff prototype (reference only, not our code)
+design_handoff_manga_portfolio*
+
 # Build outputs
 dist
 .astro
