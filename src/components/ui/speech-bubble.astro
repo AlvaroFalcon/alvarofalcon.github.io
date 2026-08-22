@@ -1,0 +1,40 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** Manga speech balloon holding the hero quote. */
+type Props = HTMLAttributes<"div">;
+
+const { class: className, ...rest } = Astro.props;
+---
+
+<div class:list={["speech-bubble", className]} {...rest}>
+	<slot />
+	<span class="tail" aria-hidden="true"></span>
+</div>
+
+<style>
+	.speech-bubble {
+		position: relative;
+		max-width: 420px;
+		border: var(--border-rule) solid var(--ink);
+		background: var(--panel);
+		padding: 16px 18px;
+		font-size: var(--text-body);
+		line-height: var(--leading-bubble);
+		text-wrap: pretty;
+	}
+
+	/*
+	 * Borders meeting at a mitre make the triangle: a solid top edge with a
+	 * transparent left edge leaves a right-angled tail pointing down-left.
+	 */
+	.tail {
+		position: absolute;
+		left: 38px;
+		bottom: -16px;
+		width: 0;
+		height: 0;
+		border-left: 16px solid transparent;
+		border-top: 16px solid var(--ink);
+	}
+</style>

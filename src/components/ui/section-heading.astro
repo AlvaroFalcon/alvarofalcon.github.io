@@ -1,0 +1,46 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/*
+ * A section title followed by a rule that eats the remaining width. The rule
+ * sits on the type's baseline rather than its box, which is why it carries a
+ * bottom margin instead of being centred.
+ */
+interface Props extends HTMLAttributes<"div"> {
+	title: string;
+	/** Referenced by the section's aria-labelledby. */
+	id: string;
+}
+
+const { title, id, class: className, ...rest } = Astro.props;
+---
+
+<div class:list={["section-heading", className]} {...rest}>
+	<h2 {id}>{title}</h2>
+	<span class="rule" aria-hidden="true"></span>
+</div>
+
+<style>
+	.section-heading {
+		display: flex;
+		align-items: flex-end;
+		gap: 16px;
+		margin-bottom: 20px;
+	}
+
+	h2 {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: var(--text-section-title);
+		font-weight: 400;
+		line-height: var(--leading-section-title);
+		text-transform: uppercase;
+	}
+
+	.rule {
+		flex: 1;
+		height: var(--border-rule);
+		background: var(--ink);
+		margin-bottom: 14px;
+	}
+</style>

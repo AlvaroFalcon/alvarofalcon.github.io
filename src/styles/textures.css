@@ -34,9 +34,11 @@
 
 /*
  * Fade the tone out across the panel so it reads as printed shading rather
- * than a flat pattern. The angle points at the corner the tone fades toward.
+ * than a flat pattern. Class names describe where the tone disappears: a
+ * gradient angle starts opaque at the opposite corner, so 215deg (pointing
+ * down-left) is densest at the top-right and clears toward the bottom-left.
  */
-.texture--fade-to-top-left {
+.texture--fade-bottom-left {
 	--texture-mask: linear-gradient(
 		215deg,
 		#000 0%,
@@ -47,7 +49,7 @@
 	mask-image: var(--texture-mask);
 }
 
-.texture--fade-to-bottom-right {
+.texture--fade-top-left {
 	--texture-mask: linear-gradient(
 		325deg,
 		#000 0%,

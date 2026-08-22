@@ -1,0 +1,131 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/*
+ * Every call-to-action on the page. Without an `href` it renders a <span>,
+ * which is what the "COMING SOON" marker needs — it must not be focusable or
+ * announced as a link.
+ */
+interface Props extends Omit<HTMLAttributes<"a">, "href"> {
+	href?: string | undefined;
+	/**
+	 * `solid` fills with ink and goes accent on hover; `outline` inverts to an
+	 * ink fill; `on-dark` is the same inversion for use inside ink panels.
+	 */
+	variant?: "solid" | "outline" | "on-dark";
+	size?: "sm" | "md" | "lg";
+	/** The hero primary CTA carries its own small offset shadow. */
+	shadow?: boolean;
+	/** Dashed border for the placeholder/unavailable state. */
+	dashed?: boolean;
+}
+
+const {
+	href,
+	variant = "outline",
+	size = "sm",
+	shadow = false,
+	dashed = false,
+	class: className,
+	...rest
+} = Astro.props;
+
+const Tag = href ? "a" : "span";
+
+// Off-site links always open in a new tab; detected here so no caller can
+// forget the rel and leave the site reachable through window.opener.
+const isExternal = href?.startsWith("http") ?? false;
+const linkProps = href
+	? { href, ...(isExternal ? { target: "_blank", rel: "noopener" } : {}) }
+	: {};
+---
+
+<Tag
+	class:list={["ink-button", className]}
+	data-variant={variant}
+	data-size={size}
+	data-shadow={shadow ? "" : undefined}
+	data-dashed={dashed ? "" : undefined}
+	{...linkProps}
+	{...rest}
+>
+	<slot />
+</Tag>
+
+<style>
+	.ink-button {
+		display: inline-block;
+		border: var(--border-rule) solid var(--button-border, var(--ink));
+		background: var(--button-bg, transparent);
+		color: var(--button-fg, var(--ink));
+		font-weight: 900;
+		text-align: center;
+		transition:
+			background var(--duration-invert) linear,
+			color var(--duration-invert) linear,
+			box-shadow var(--duration-invert) linear;
+	}
+
+	/* ---- Variants -------------------------------------------------------- */
+	.ink-button[data-variant="solid"] {
+		--button-bg: var(--ink);
+		--button-fg: var(--paper);
+	}
+
+	.ink-button[data-variant="solid"]:hover {
+		--button-bg: var(--accent);
+	}
+
+	.ink-button[data-variant="outline"]:hover {
+		--button-bg: var(--ink);
+		--button-fg: var(--paper);
+	}
+
+	.ink-button[data-variant="on-dark"] {
+		--button-border: var(--paper);
+		--button-fg: var(--paper);
+	}
+
+	.ink-button[data-variant="on-dark"]:hover {
+		--button-bg: var(--paper);
+		--button-fg: var(--ink);
+	}
+
+	/* ---- Sizes ----------------------------------------------------------- */
+	.ink-button[data-size="sm"] {
+		padding: 12px 22px;
+		font-size: var(--text-meta);
+		letter-spacing: var(--tracking-cta);
+	}
+
+	.ink-button[data-size="md"] {
+		padding: 14px 26px;
+		font-size: var(--text-label);
+		letter-spacing: var(--tracking-button);
+	}
+
+	/*
+	 * Only the mailto button. The address is long and unbreakable, so it has to
+	 * be allowed to wrap mid-word or it overflows the panel on narrow screens.
+	 */
+	.ink-button[data-size="lg"] {
+		padding: 16px 26px;
+		font-size: clamp(13px, 1.5vw, 18px);
+		letter-spacing: 0.1em;
+		word-break: break-all;
+	}
+
+	/* ---- Modifiers ------------------------------------------------------- */
+	.ink-button[data-shadow] {
+		box-shadow: var(--shadow-cta);
+	}
+
+	.ink-button[data-shadow]:hover {
+		box-shadow: 5px 5px 0 var(--ink);
+	}
+
+	.ink-button[data-dashed] {
+		border-style: dashed;
+		opacity: 0.7;
+	}
+</style>
