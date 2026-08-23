@@ -1,0 +1,10 @@
+{
+	"order": 3,
+	"title": "Grocery\nList Bot",
+	"category": "AUTOMATION",
+	"summary": "Recipes live in Notion; a Telegram bot aggregates the ingredients of the meals you pick into a single shopping list. Grocery planning, automated.",
+	"stack": ["Notion API", "Telegram Bot API", "TypeScript"],
+	"href": "https://dev.to/alvarofalcon/automating-grocery-lists-with-notion-and-telegram-1h35",
+	"cta": "READ THE POST",
+	"variant": "compact"
+}

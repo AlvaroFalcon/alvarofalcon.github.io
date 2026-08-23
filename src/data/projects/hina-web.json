@@ -1,0 +1,9 @@
+{
+	"order": 2,
+	"title": "Hina Web",
+	"category": "WIP",
+	"summary": "Web app to learn and memorise hiragana and katakana through progressive, module-based practice — new modules unlock as you advance. Next.js + Supabase for auth and data.",
+	"stack": ["Next.js", "Supabase", "TypeScript"],
+	"screentone": true,
+	"variant": "compact"
+}

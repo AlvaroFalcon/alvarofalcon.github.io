@@ -1,0 +1,10 @@
+{
+	"order": 1,
+	"title": "Bakalendar\nAndroid",
+	"category": "ANDROID · KOTLIN",
+	"summary": "Native Android app with a seasonal anime release calendar and daily alerts for your favourite shows. Kotlin + MVVM, Retrofit for the API, Hilt for DI and Room for offline-friendly persistence.",
+	"stack": ["Kotlin", "MVVM", "Retrofit", "Hilt", "Room"],
+	"href": "https://play.google.com/store/apps/details?id=com.frostfel.animelist&hl=en",
+	"cta": "VIEW PROJECT",
+	"variant": "featured"
+}
