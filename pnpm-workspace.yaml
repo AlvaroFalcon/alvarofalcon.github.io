@@ -1,0 +1,25 @@
+# pnpm settings live here, not in package.json — pnpm 11 stopped reading the
+# "pnpm" field entirely.
+#
+# esbuild and sharp both need their install scripts: esbuild's postinstall
+# places its platform binary, sharp's install step resolves libvips. Left
+# undeclared, pnpm skips them; pnpm 10 only warns, but pnpm 11 fails the
+# install outright with ERR_PNPM_IGNORED_BUILDS.
+#
+# The same permission is declared twice on purpose. pnpm 11 renamed
+# onlyBuiltDependencies to allowBuilds, so a single key would silently do
+# nothing on one version or the other. Each release reads the key it knows and
+# ignores the other; verified on 10.25 that both together install cleanly.
+#
+# Entries are unversioned because sharp appears twice in the tree: 0.35.3 as a
+# direct dependency and 0.34.5 by way of astro.
+
+# pnpm 10.x
+onlyBuiltDependencies:
+  - esbuild
+  - sharp
+
+# pnpm 10.26+ and 11.x
+allowBuilds:
+  esbuild: true
+  sharp: true
