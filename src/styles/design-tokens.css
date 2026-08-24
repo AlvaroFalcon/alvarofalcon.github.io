@@ -1,0 +1,113 @@
+/*
+ * Design tokens — the single source of truth for the manga/print look.
+ *
+ * If a value shows up in more than one component, it belongs here. Component
+ * stylesheets are expected to reference these and never restate the literals.
+ */
+
+:root {
+	/* ---- Colour -------------------------------------------------------- */
+	--ink: #12100e; /* text, every border, hard shadows, dark panel fills */
+	--paper: #efebe0; /* page background, text on dark panels */
+	--panel: #ffffff; /* white panel fill (About body, project cards) */
+	--paper-2: #dcd6c6; /* backing behind portrait/screenshots */
+
+	/*
+	 * Change this one line to re-theme the whole site. Approved alternates:
+	 * #1f4ed8 (blue), #12100e (mono), #c8621e (orange).
+	 */
+	--accent: #c8102e;
+
+	/* ---- Type families -------------------------------------------------- */
+	/*
+	 * Anton is display-only. The fallbacks are condensed on purpose so the
+	 * swap-in shift stays small: the h1 is the LCP element.
+	 */
+	--font-display: "Anton", Impact, "Arial Narrow", sans-serif;
+	--font-text: "Zen Kaku Gothic New", system-ui, sans-serif;
+
+	/* ---- Type scale ------------------------------------------------------ */
+	--text-hero: clamp(48px, 7vw, 96px);
+	--text-section-title: clamp(38px, 5vw, 64px);
+	--text-contact-title: clamp(48px, 8vw, 110px);
+	--text-project-title-featured: 40px;
+	--text-project-title-compact: 34px;
+	--text-project-title-dark: 44px;
+	--text-quote: 52px;
+	--text-hero-subtitle: 22px;
+	--text-about-body: 18px;
+	--text-contact-body: 17px;
+	--text-body: 15px;
+	--text-eyebrow: 14px;
+	--text-label: 13px;
+	--text-meta: 12px;
+	--text-chip: 11px;
+
+	/* Display faces are set tight; each block overrides as needed. */
+	--leading-hero: 0.88;
+	--leading-display: 0.95;
+	--leading-quote: 0.92;
+	--leading-section-title: 0.9;
+	--leading-contact-title: 0.85;
+	--leading-about-body: 1.7;
+	--leading-body: 1.65;
+	--leading-contact-body: 1.6;
+	--leading-bubble: 1.55;
+
+	--tracking-hero: 0.01em;
+	--tracking-wordmark: 0.06em;
+	--tracking-chip-label: 0.08em;
+	--tracking-meta: 0.12em;
+	--tracking-nav: 0.14em;
+	--tracking-button: 0.16em;
+	--tracking-cta: 0.18em;
+	--tracking-label: 0.2em;
+	--tracking-vertical: 0.22em;
+	--tracking-caption: 0.24em;
+	--tracking-chip: 0.28em;
+	--tracking-eyebrow: 0.3em;
+
+	/* Measure caps — prose only, keeps line length readable. */
+	--measure-about: 62ch;
+	--measure-contact: 46ch;
+
+	/* ---- Layout ---------------------------------------------------------- */
+	--container-max: 1240px;
+	--container-pad: 24px;
+	--section-gap: 74px;
+	--grid-gap: 18px;
+
+	/*
+	 * Intrinsic column floors. Every grid uses
+	 * repeat(auto-fit, minmax(min(100%, <floor>), 1fr)) so columns collapse
+	 * without a single media query.
+	 */
+	--col-hero: 420px;
+	--col-about: 360px;
+	--col-projects: 340px;
+	--col-featured: 380px;
+
+	/* ---- Borders --------------------------------------------------------- */
+	--border-panel: 4px;
+	--border-rule: 3px;
+	--border-chip: 2px;
+
+	/* ---- Hard offset shadows -------------------------------------------- */
+	/* Never blurred — this is ink on paper, not a drop shadow. */
+	--shadow-card: 8px 8px 0 var(--ink);
+	--shadow-panel: 10px 10px 0 var(--ink);
+	--shadow-cta: 5px 5px 0 var(--accent);
+	--shadow-card-invert: 8px 8px 0 var(--accent);
+
+	--shadow-card-hover: 14px 14px 0 var(--accent);
+	--shadow-about-hover: 12px 12px 0 var(--accent);
+	--shadow-portrait-hover: 16px 16px 0 var(--accent);
+
+	/* ---- Motion ---------------------------------------------------------- */
+	/* Compositor-only properties, so hover never triggers layout. */
+	--lift-card: -5px;
+	--lift-about: -4px;
+	--ease-lift: cubic-bezier(0.2, 0.7, 0.3, 1);
+	--duration-lift: 0.18s;
+	--duration-invert: 0.15s;
+}

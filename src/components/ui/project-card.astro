@@ -1,0 +1,245 @@
+---
+import { Image } from "astro:assets";
+import InkPanel from "~/components/ui/ink-panel.astro";
+import InkButton from "~/components/ui/ink-button.astro";
+import ChapterChip from "~/components/ui/chapter-chip.astro";
+
+/*
+ * One project panel. Fully prop-driven — the projects section maps collection
+ * entries onto this, so the card never reaches for content itself.
+ */
+interface Props {
+	/** Chapter number, rendered as "CH. 01". */
+	order: number;
+	title: string;
+	category: string;
+	summary: string;
+	stack: string[];
+	/** Absent means unreleased: the CTA becomes an inert COMING SOON marker. */
+	href?: string | undefined;
+	cta?: string | undefined;
+	cover?: ImageMetadata | undefined;
+	coverAlt?: string | undefined;
+	screentone?: boolean;
+	variant?: "featured" | "compact" | "dark";
+}
+
+const {
+	order,
+	title,
+	category,
+	summary,
+	stack,
+	href,
+	cta = "VIEW PROJECT",
+	cover,
+	coverAlt,
+	screentone = false,
+	variant = "compact",
+} = Astro.props;
+
+const isDark = variant === "dark";
+const chapter = `CH. ${String(order).padStart(2, "0")}`;
+---
+
+<InkPanel
+	as="article"
+	tone={isDark ? "ink" : "panel"}
+	lift
+	class="project-card"
+	data-variant={variant}
+>
+	{
+		variant === "featured" && (
+			<div class="media">
+				<span class="texture texture--speed-lines" />
+				{cover && (
+					<Image
+						src={cover}
+						alt={coverAlt ?? ""}
+						widths={[400, 800, 1200]}
+						sizes="(max-width: 780px) 100vw, 50vw"
+						loading="lazy"
+						decoding="async"
+					/>
+				)}
+			</div>
+		)
+	}
+
+	{
+		screentone && (
+			<span
+				class="texture texture--dots texture--fade-top-left"
+				style="--dot-size: 9px;"
+			/>
+		)
+	}
+
+	{/* Keeps the copy as one grid item beside the featured image. */}
+	<div class="content">
+		<div class="head">
+			<div class="meta">
+				<ChapterChip tone={isDark ? "paper" : "ink"}>{chapter}</ChapterChip>
+				<span class="category">{category}</span>
+			</div>
+			<h3>{title}</h3>
+		</div>
+
+		<div class="body">
+			<p class="summary">{summary}</p>
+			<p class="stack">{stack.join(" · ")}</p>
+			{
+				href ? (
+					<InkButton
+						href={href}
+						variant={isDark ? "on-dark" : "outline"}
+						class="cta"
+					>
+						{cta} →
+					</InkButton>
+				) : (
+					<InkButton dashed class="cta">
+						COMING SOON
+					</InkButton>
+				)
+			}
+		</div>
+	</div>
+</InkPanel>
+
+<style>
+	.project-card {
+		position: relative;
+		overflow: hidden;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+		padding: 30px 32px;
+	}
+
+	/* ---- Shared type ------------------------------------------------------ */
+	h3 {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: var(--text-project-title-compact);
+		font-weight: 400;
+		line-height: var(--leading-display);
+		text-transform: uppercase;
+		/* Titles carry deliberate line breaks from the data. */
+		white-space: pre-line;
+	}
+
+	.content,
+	.head,
+	.body {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 14px;
+	}
+
+	/* Both stretch so the CTA can sit on the bottom edge of the card. */
+	.content,
+	.body {
+		flex: 1;
+	}
+
+	.meta {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.category {
+		font-size: var(--text-meta);
+		font-weight: 700;
+		letter-spacing: var(--tracking-label);
+		color: var(--accent);
+	}
+
+	.summary {
+		margin: 0;
+		font-size: var(--text-body);
+		line-height: var(--leading-body);
+		text-wrap: pretty;
+	}
+
+	.stack {
+		margin: 0;
+		font-size: var(--text-meta);
+		font-weight: 700;
+		letter-spacing: var(--tracking-meta);
+		opacity: 0.65;
+	}
+
+	.cta {
+		margin-top: auto;
+		align-self: flex-start;
+	}
+
+	/* ---- Featured: full width, image beside the copy ---------------------- */
+	.project-card[data-variant="featured"] {
+		grid-column: 1 / -1;
+		display: grid;
+		grid-template-columns: repeat(
+			auto-fit,
+			minmax(min(100%, var(--col-featured)), 1fr)
+		);
+		gap: 0;
+		padding: 0;
+	}
+
+	.media {
+		position: relative;
+		background: var(--paper-2);
+		overflow: hidden;
+		/* Reserves height before the image decodes, so nothing shifts. */
+		min-height: 300px;
+	}
+
+	.media :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.project-card[data-variant="featured"] .content {
+		padding: 32px 34px;
+	}
+
+	.project-card[data-variant="featured"] h3 {
+		font-size: var(--text-project-title-featured);
+	}
+
+	/* ---- Dark: full width, title opposite the copy ------------------------ */
+	.project-card[data-variant="dark"] {
+		grid-column: 1 / -1;
+		display: grid;
+		grid-template-columns: repeat(
+			auto-fit,
+			minmax(min(100%, var(--col-projects)), 1fr)
+		);
+		gap: 28px;
+		align-items: center;
+		padding: 34px 36px;
+	}
+
+	/*
+	 * The dark card puts the title opposite the copy, so head and body have to
+	 * be grid items of the card itself rather than of a shared wrapper.
+	 */
+	.project-card[data-variant="dark"] .content {
+		display: contents;
+	}
+
+	.project-card[data-variant="dark"] h3 {
+		font-size: var(--text-project-title-dark);
+	}
+
+	/* On ink the kicker is already high-contrast; accent would vibrate. */
+	.project-card[data-variant="dark"] .category {
+		color: inherit;
+	}
+</style>

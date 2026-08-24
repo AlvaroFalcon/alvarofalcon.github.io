@@ -1,0 +1,123 @@
+---
+import InkPanel from "~/components/ui/ink-panel.astro";
+import InkButton from "~/components/ui/ink-button.astro";
+import { SITE_CONFIG } from "~/lib/site-config";
+---
+
+<section id="connect" aria-labelledby="connect-heading">
+	<InkPanel
+		tone="paper"
+		class="panel"
+		style="--panel-shadow: var(--shadow-panel);"
+	>
+		<span
+			class="texture texture--rays"
+			style="--ray-origin: 12% 88%; --ray-gap: 5deg; --texture-opacity: 0.12;"
+		></span>
+
+		<div class="layout">
+			<div>
+				<p class="eyebrow">FINAL PANEL</p>
+				<h2 id="connect-heading">
+					Let's<br /><span class="accent">Connect</span>
+				</h2>
+				<p class="lede">
+					Whether you have a project in mind, a question, or just want to
+					connect — don't hesitate to reach out.
+				</p>
+
+				<InkButton
+					href={`mailto:${SITE_CONFIG.email}`}
+					variant="solid"
+					size="lg"
+					class="mail"
+				>
+					{SITE_CONFIG.email.toUpperCase()}
+				</InkButton>
+
+				<div class="socials">
+					<InkButton href={SITE_CONFIG.links.linkedin}>LINKEDIN</InkButton>
+					<InkButton href={SITE_CONFIG.links.github}>GITHUB</InkButton>
+				</div>
+			</div>
+
+			<p class="continued" aria-hidden="true">TO BE CONTINUED</p>
+		</div>
+	</InkPanel>
+</section>
+
+<style>
+	section {
+		margin-top: var(--section-gap);
+	}
+
+	.panel {
+		overflow: hidden;
+		padding: 56px 44px;
+	}
+
+	.layout {
+		position: relative;
+		display: grid;
+		/*
+		 * minmax(0, 1fr) rather than a bare 1fr: the default minimum is
+		 * min-content, which would let the copy push the column wider than the
+		 * panel on narrow screens instead of wrapping inside it.
+		 */
+		grid-template-columns: minmax(0, 1fr) auto;
+		gap: 36px;
+		align-items: end;
+	}
+
+	.eyebrow {
+		margin: 0 0 10px;
+		font-size: var(--text-eyebrow);
+		font-weight: 900;
+		letter-spacing: var(--tracking-eyebrow);
+	}
+
+	h2 {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: var(--text-contact-title);
+		font-weight: 400;
+		line-height: var(--leading-contact-title);
+		text-transform: uppercase;
+	}
+
+	.accent {
+		color: var(--accent);
+	}
+
+	.lede {
+		margin: 22px 0 0;
+		font-size: var(--text-contact-body);
+		line-height: var(--leading-contact-body);
+		max-width: var(--measure-contact);
+		text-wrap: pretty;
+	}
+
+	.mail {
+		margin-top: 26px;
+	}
+
+	.socials {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: 16px;
+	}
+
+	.continued {
+		margin: 0;
+		writing-mode: vertical-rl;
+		font-family: var(--font-display);
+		font-size: clamp(18px, 2vw, 26px);
+		letter-spacing: var(--tracking-vertical);
+		color: var(--accent);
+		border-left: var(--border-panel) solid var(--ink);
+		padding-left: 14px;
+		text-transform: uppercase;
+		white-space: nowrap;
+	}
+</style>

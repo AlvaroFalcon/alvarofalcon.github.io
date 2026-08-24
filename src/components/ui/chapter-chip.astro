@@ -1,0 +1,37 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/** The "CH. 01" marker on each project card. */
+interface Props extends HTMLAttributes<"span"> {
+	/** Flips to a paper fill so the chip stays legible on ink panels. */
+	tone?: "ink" | "paper";
+}
+
+const { tone = "ink", class: className, ...rest } = Astro.props;
+---
+
+<span class:list={["chapter-chip", className]} data-tone={tone} {...rest}>
+	<slot />
+</span>
+
+<style>
+	.chapter-chip {
+		background: var(--chip-bg);
+		color: var(--chip-fg);
+		padding: 6px 10px;
+		font-size: var(--text-chip);
+		font-weight: 900;
+		letter-spacing: var(--tracking-chip);
+		white-space: nowrap;
+	}
+
+	.chapter-chip[data-tone="ink"] {
+		--chip-bg: var(--ink);
+		--chip-fg: var(--paper);
+	}
+
+	.chapter-chip[data-tone="paper"] {
+		--chip-bg: var(--paper);
+		--chip-fg: var(--ink);
+	}
+</style>

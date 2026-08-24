@@ -1,5 +1,14 @@
 {
 	"extends": "astro/tsconfigs/strict",
 	"include": [".astro/types.d.ts", "**/*"],
-	"exclude": ["dist"]
+	"exclude": ["dist", "design_handoff_manga_portfolio"],
+	"compilerOptions": {
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"verbatimModuleSyntax": true,
+		"paths": {
+			"~/*": ["src/*"]
+		}
+	}
 }

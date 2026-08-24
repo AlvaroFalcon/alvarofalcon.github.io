@@ -1,0 +1,89 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+/*
+ * The core visual motif: heavy ink border plus a hard, never-blurred offset
+ * shadow, optionally lifting on hover.
+ *
+ * Fill and shadow are driven by custom properties rather than a variant per
+ * combination — the design uses four fills against six shadow pairings, and
+ * enumerating those would mean a dozen near-identical rules. Callers that need
+ * a non-default shadow set it inline:
+ *
+ *   <InkPanel lift style="--panel-shadow-hover: var(--shadow-portrait-hover)">
+ */
+interface Props extends HTMLAttributes<"div"> {
+	/** Element to render. Sections and cards need their own semantics. */
+	as?: "div" | "article" | "section" | "aside";
+	/** Panel fill. `ink` also flips the text colour to paper. */
+	tone?: "paper" | "panel" | "ink" | "backing";
+	/** Enables the hover lift. Off for panels that are not interactive. */
+	lift?: boolean;
+}
+
+const {
+	as: Tag = "div",
+	tone = "paper",
+	lift = false,
+	class: className,
+	...rest
+} = Astro.props;
+---
+
+<Tag
+	class:list={["ink-panel", className]}
+	data-tone={tone}
+	data-lift={lift ? "" : undefined}
+	{...rest}
+>
+	<slot />
+</Tag>
+
+<style>
+	.ink-panel {
+		position: relative;
+		border: var(--border-panel) solid var(--ink);
+		background: var(--panel-bg);
+		color: var(--panel-fg);
+		box-shadow: var(--panel-shadow, var(--shadow-card));
+	}
+
+	.ink-panel[data-tone="paper"] {
+		--panel-bg: var(--paper);
+		--panel-fg: var(--ink);
+	}
+
+	.ink-panel[data-tone="panel"] {
+		--panel-bg: var(--panel);
+		--panel-fg: var(--ink);
+	}
+
+	.ink-panel[data-tone="backing"] {
+		--panel-bg: var(--paper-2);
+		--panel-fg: var(--ink);
+	}
+
+	/* Dark panels invert: the shadow picks up the accent instead of the ink. */
+	.ink-panel[data-tone="ink"] {
+		--panel-bg: var(--ink);
+		--panel-fg: var(--paper);
+		--panel-shadow: var(--shadow-card-invert);
+	}
+
+	/*
+	 * Only transform and box-shadow animate, so hover stays on the compositor
+	 * and never triggers layout. `prefers-reduced-motion` is handled globally.
+	 */
+	.ink-panel[data-lift] {
+		will-change: transform;
+		transition:
+			transform var(--duration-lift) var(--ease-lift),
+			box-shadow var(--duration-lift) var(--ease-lift);
+	}
+
+	.ink-panel[data-lift]:hover {
+		--lift: var(--panel-lift, var(--lift-card));
+		transform: translate3d(var(--lift), var(--lift), 0);
+		box-shadow: var(--panel-shadow-hover, var(--shadow-card-hover));
+	}
+</style>

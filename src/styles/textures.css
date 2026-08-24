@@ -1,0 +1,85 @@
+/*
+ * Screentone and speed-line textures.
+ *
+ * All of it is CSS gradients — no PNG or SVG texture ever gets requested.
+ * Each texture is a decorative overlay element that fills its parent, so the
+ * parent needs `position: relative` and `overflow: hidden`.
+ *
+ * Variants are tuned through custom properties rather than extra classes,
+ * so a component can nudge one value inline without a new rule:
+ *
+ *   <span class="texture texture--dots" style="--dot-size: 9px" />
+ */
+
+.texture {
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	opacity: var(--texture-opacity, 0.2);
+}
+
+/* ---- Screentone dots ---------------------------------------------------- */
+/*
+ * Two radii: the first is where the dot ends, the second where transparency
+ * begins. The gap between them is the antialiased edge — without it the dots
+ * alias badly on non-retina displays.
+ */
+.texture--dots {
+	background-image: radial-gradient(
+		var(--ink) var(--dot-radius, 1.4px),
+		transparent var(--dot-feather, 1.6px)
+	);
+	background-size: var(--dot-size, 8px) var(--dot-size, 8px);
+}
+
+/*
+ * Fade the tone out across the panel so it reads as printed shading rather
+ * than a flat pattern. Class names describe where the tone disappears: a
+ * gradient angle starts opaque at the opposite corner, so 215deg (pointing
+ * down-left) is densest at the top-right and clears toward the bottom-left.
+ */
+.texture--fade-bottom-left {
+	--texture-mask: linear-gradient(
+		215deg,
+		#000 0%,
+		rgba(0, 0, 0, 0.35) 55%,
+		transparent 85%
+	);
+	-webkit-mask-image: var(--texture-mask);
+	mask-image: var(--texture-mask);
+}
+
+.texture--fade-top-left {
+	--texture-mask: linear-gradient(
+		325deg,
+		#000 0%,
+		rgba(0, 0, 0, 0.35) 55%,
+		transparent 85%
+	);
+	-webkit-mask-image: var(--texture-mask);
+	mask-image: var(--texture-mask);
+}
+
+/* ---- Radial burst / speed rays ------------------------------------------ */
+/*
+ * The classic manga impact burst. `--ray-origin` places the vanishing point
+ * and `--ray-gap` sets how far apart the rays fan out.
+ */
+.texture--rays {
+	background-image: repeating-conic-gradient(
+		from 0deg at var(--ray-origin, 88% 18%),
+		var(--ink) 0deg 0.5deg,
+		transparent 0.5deg var(--ray-gap, 4.5deg)
+	);
+	--texture-opacity: 0.13;
+}
+
+/* ---- Diagonal speed lines ----------------------------------------------- */
+.texture--speed-lines {
+	background-image: repeating-linear-gradient(
+		115deg,
+		var(--ink) 0 2px,
+		transparent 2px 12px
+	);
+	--texture-opacity: 0.16;
+}

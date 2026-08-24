@@ -1,0 +1,10 @@
+{
+	"order": 4,
+	"title": "Nefroconsultor Mobile",
+	"category": "HEALTHCARE · MOBILE",
+	"summary": "Android and iOS app supporting clinical decision-making for Chronic Kidney Disease, aimed at primary care physicians and specialists. I've collaborated on and off over several years, developing and maintaining both apps.",
+	"stack": ["Android", "Java", "iOS", "Objective-C"],
+	"href": "https://play.google.com/store/apps/details?id=com.madilon.nefroconsultor&hl=es",
+	"cta": "VIEW PROJECT",
+	"variant": "dark"
+}
