@@ -1,0 +1,77 @@
+---
+// Self-hosted subsets. Latin covers the "Ó" in Falcón (U+00D3 sits inside
+// the latin range); latin-ext is loaded for the rest of the copy and only
+// downloads if a glyph actually needs it.
+import "@fontsource/anton/latin-400.css";
+import "@fontsource/anton/latin-ext-400.css";
+import "@fontsource/zen-kaku-gothic-new/latin-400.css";
+import "@fontsource/zen-kaku-gothic-new/latin-700.css";
+import "@fontsource/zen-kaku-gothic-new/latin-900.css";
+import "@fontsource/zen-kaku-gothic-new/latin-ext-400.css";
+
+import "~/styles/design-tokens.css";
+import "~/styles/textures.css";
+import "~/styles/global.css";
+
+import antonLatin from "@fontsource/anton/files/anton-latin-400-normal.woff2?url";
+import SiteHeader from "~/components/layout/site-header.astro";
+import SiteFooter from "~/components/layout/site-footer.astro";
+import { SITE_CONFIG } from "~/lib/site-config";
+
+interface Props {
+	title?: string;
+	description?: string;
+}
+
+const {
+	title = `${SITE_CONFIG.name} — ${SITE_CONFIG.role}`,
+	description = SITE_CONFIG.description,
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<meta name="generator" content={Astro.generator} />
+
+		<title>{title}</title>
+		<meta name="description" content={description} />
+		<link rel="canonical" href={canonical} />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+		{/* Anton paints the h1, which is the LCP element. */}
+		<link
+			rel="preload"
+			href={antonLatin}
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+
+		<meta property="og:type" content="website" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonical} />
+		<meta name="twitter:card" content="summary" />
+	</head>
+
+	<body>
+		<SiteHeader />
+		<main id="top">
+			<slot />
+		</main>
+		<SiteFooter />
+	</body>
+</html>
+
+<style>
+	main {
+		max-width: var(--container-max);
+		margin: 0 auto;
+		padding: 28px var(--container-pad) 0;
+	}
+</style>

@@ -1,93 +1,75 @@
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:wght@400;700&display=swap');
+/*
+ * Resets, document defaults and accessibility affordances.
+ * Values live in design-tokens.css; nothing here restates a literal.
+ */
 
-:root {
-  --navbar: 5rem;
-  --navbar-mobile: 2rem;
-  --foreground: 220 3.7% 15.9%;
-  font-family: 'Space Mono', monospace;
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
 }
 
 html {
-  scroll-behavior: smooth;
+	scroll-behavior: smooth;
 }
 
-.navbar {
-  @apply p-8 fixed top-0 left-0 right-0 z-10 transition-colors duration-300 flex justify-between items-center h-[var(--navbar-mobile)];
-  @apply md:h-[var(--navbar)];
-}
-.nav-link {
-	@apply text-xl text-gray-500;
-	transition: text-shadow 0.2s ease;
-}
-
-.nav-link:hover {
-	text-shadow: 1px 1px 0 rgb(255, 0, 0);
+body {
+	margin: 0;
+	background: var(--paper);
+	color: var(--ink);
+	font-family: var(--font-text);
+	-webkit-font-smoothing: antialiased;
+	/* Hard shadows sit outside their panels and would otherwise scroll. */
+	overflow-x: hidden;
 }
 
-.nav-title {
-	@apply text-3xl text-black font-bold;
-}
-.header {
-	@apply min-h-screen w-full bg-black absolute top-0 left-0 right-0;
-}
-.header-inner {
-	@apply pt-[var(--navbar)]
+h1,
+h2,
+h3,
+p,
+figure {
+	margin: 0;
 }
 
-.speed-lines {
-  background: repeating-linear-gradient(0deg,
-      transparent,
-      transparent 8px,
-      hsl(var(--foreground) / 0.1) 8px,
-      hsl(var(--foreground) / 0.1) 9px);
+img,
+svg {
+	display: block;
+	max-width: 100%;
 }
 
-.halftone {
-  background-image: radial-gradient(hsl(var(--foreground) / 0.15) 1px,
-      transparent 1px);
-  background-size: 4px 4px;
+/*
+ * Links default to ink and go accent on hover, so nothing ever renders in
+ * browser blue.
+ */
+a {
+	color: var(--ink);
+	text-decoration: none;
 }
 
-.title {  
-  @apply shadowed-title;
-  font-size: 3rem;
-  @apply md:text-8xl;
-}
-.shadowed-title {
-  text-shadow: 3px 3px 0 rgb(255, 0, 0);
-}
-.shadowed-subtitle {
-  text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000, 3px 3px 0 rgb(255, 0, 0);
+a:hover {
+	color: var(--accent);
 }
 
-.subtitle {
-   @apply shadowed-subtitle;
-    font-size: 1.5rem;
-    @apply md:text-6xl;
+/*
+ * The design only specifies hover states. Keyboard users need an equivalent,
+ * and the outline has to clear the heavy borders to stay visible.
+ */
+:focus-visible {
+	outline: var(--border-rule) solid var(--accent);
+	outline-offset: 2px;
 }
 
-.manga-border {
-  @apply border-2 border-black;
-}
+/* Nothing on the page depends on motion to be understood. */
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
 
-.profile-pic {
-  @apply m-auto md:m-0 w-full h-auto md:w-4/5 object-contain object-top self-end;  
-  box-shadow: 2px 2px 0 1px rgb(255, 0, 0), -2px -2px 0 1px rgb(0, 0, 0);
-  max-width: 100%;
-  max-height: 100%;
+	*,
+	*::before,
+	*::after {
+		transition-duration: 0.01ms !important;
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+	}
 }
-.about-section-container {
-  @apply section-container space-y-4 p-8 flex gap-4 flex-col md:flex-row;
-}
-.section-container {
-  @apply m-auto w-full md:w-9/12  space-y-4 p-8;
-}
-
-.font-bebas {
-  font-family: 'Bebas Neue', sans-serif;
-}
-
-h1, h2, h3 {
-  font-family: 'Bebas Neue', sans-serif;
-}
-
