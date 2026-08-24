@@ -48,7 +48,10 @@ import portrait from "~/assets/portrait.png";
 		class="portrait"
 		style="--panel-shadow: var(--shadow-panel); --panel-shadow-hover: var(--shadow-portrait-hover);"
 	>
-		<span class="texture texture--dots" style="--dot-size: 7px;"></span>
+		{/* Lighter than the handoff's .2: over a photo that reads as noise. */}
+		<span
+			class="texture texture--dots"
+			style="--dot-size: 7px; --texture-opacity: 0.1;"></span>
 		<Image
 			src={portrait}
 			alt={`${SITE_CONFIG.name}, ${SITE_CONFIG.role}`}
