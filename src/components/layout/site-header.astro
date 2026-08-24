@@ -1,0 +1,104 @@
+---
+import { SITE_CONFIG } from "~/lib/site-config";
+
+/*
+ * Sticky header. Fixed height and nothing injected above it, because a header
+ * that changes height while the page loads is a CLS source.
+ *
+ * Navigation is plain anchors — no JS, no hamburger. On narrow screens the row
+ * wraps instead of collapsing behind a toggle, so every destination stays one
+ * tap away and there is no state to manage.
+ */
+---
+
+<header>
+	<div class="inner">
+		<a href="#top" class="brand">
+			<span class="mark">{SITE_CONFIG.initials}</span>
+			<span class="wordmark">{SITE_CONFIG.wordmark}</span>
+		</a>
+		<nav aria-label="Primary">
+			<a href="#about">ABOUT</a>
+			<a href="#projects">PROJECTS</a>
+			<a href="#connect" class="is-accent">CONTACT</a>
+		</nav>
+	</div>
+</header>
+
+<style>
+	header {
+		position: sticky;
+		top: 0;
+		z-index: 40;
+		background: var(--paper);
+		border-bottom: var(--border-rule) solid var(--ink);
+	}
+
+	.inner {
+		max-width: var(--container-max);
+		margin: 0 auto;
+		padding: 14px var(--container-pad);
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		justify-content: space-between;
+		gap: 12px 24px;
+	}
+
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		min-width: 0;
+	}
+
+	.mark {
+		display: grid;
+		place-items: center;
+		width: 40px;
+		height: 40px;
+		flex: none;
+		background: var(--ink);
+		color: var(--paper);
+		font-size: 16px;
+		font-weight: 900;
+		line-height: 1;
+		letter-spacing: 0.02em;
+	}
+
+	/* Scales down rather than disappearing, so the row fits without a query. */
+	.wordmark {
+		font-family: var(--font-display);
+		font-size: clamp(16px, 4vw, 22px);
+		letter-spacing: var(--tracking-wordmark);
+		white-space: nowrap;
+	}
+
+	nav {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 8px;
+	}
+
+	nav a {
+		padding: 9px 14px;
+		border: var(--border-chip) solid var(--ink);
+		font-size: var(--text-label);
+		font-weight: 700;
+		letter-spacing: var(--tracking-nav);
+		transition:
+			background var(--duration-invert) linear,
+			color var(--duration-invert) linear;
+	}
+
+	nav a:hover {
+		background: var(--ink);
+		color: var(--paper);
+	}
+
+	.is-accent {
+		background: var(--accent);
+		color: var(--paper);
+	}
+</style>

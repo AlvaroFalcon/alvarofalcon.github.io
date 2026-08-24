@@ -1,0 +1,171 @@
+---
+import { Image } from "astro:assets";
+import InkPanel from "~/components/ui/ink-panel.astro";
+import InkButton from "~/components/ui/ink-button.astro";
+import SpeechBubble from "~/components/ui/speech-bubble.astro";
+import { SITE_CONFIG } from "~/lib/site-config";
+import portrait from "~/assets/portrait.png";
+---
+
+<section class="hero" aria-label="Introduction">
+	<InkPanel
+		tone="paper"
+		class="lead"
+		style="--panel-shadow: var(--shadow-panel);"
+	>
+		<span class="texture texture--rays"></span>
+		{/* Expression, not a text node: a bare leading "//" gets swallowed. */}
+		<span class="tag">{"// DEV"}</span>
+
+		<div class="lead-content">
+			{/* The LCP element. Text, so it paints as soon as the font resolves. */}
+			<h1>
+				ALVARO<br /><span class="outlined">FALCÓN</span>
+			</h1>
+			<p class="subtitle">
+				{SITE_CONFIG.role}<span class="slash"> ／ </span>{SITE_CONFIG.tagline}
+			</p>
+
+			<SpeechBubble class="quote">
+				“In software development, every obstacle has a solution. With the right
+				mindset, anything is achievable.”
+			</SpeechBubble>
+
+			<div class="actions">
+				<InkButton href="#projects" variant="solid" size="md" shadow>
+					VIEW PROJECTS →
+				</InkButton>
+				<InkButton href="#connect" variant="outline" size="md">
+					CONTACT
+				</InkButton>
+			</div>
+		</div>
+	</InkPanel>
+
+	<InkPanel
+		tone="backing"
+		lift
+		class="portrait"
+		style="--panel-shadow: var(--shadow-panel); --panel-shadow-hover: var(--shadow-portrait-hover);"
+	>
+		<span class="texture texture--dots" style="--dot-size: 7px;"></span>
+		<Image
+			src={portrait}
+			alt={`${SITE_CONFIG.name}, ${SITE_CONFIG.role}`}
+			widths={[400, 550, 800]}
+			sizes="(max-width: 880px) 100vw, 50vw"
+			loading="eager"
+			decoding="async"
+		/>
+		<span class="caption">MAIN CHARACTER</span>
+	</InkPanel>
+</section>
+
+<style>
+	.hero {
+		display: grid;
+		grid-template-columns: repeat(
+			auto-fit,
+			minmax(min(100%, var(--col-hero)), 1fr)
+		);
+		gap: var(--grid-gap);
+		align-items: stretch;
+	}
+
+	.lead {
+		overflow: hidden;
+		min-height: 520px;
+		padding: 44px 40px 36px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+	}
+
+	.lead-content {
+		position: relative;
+		min-width: 0;
+	}
+
+	.tag {
+		position: absolute;
+		top: 0;
+		right: 0;
+		padding: 8px 12px;
+		background: var(--ink);
+		color: var(--paper);
+		font-size: var(--text-meta);
+		font-weight: 700;
+		letter-spacing: var(--tracking-eyebrow);
+	}
+
+	h1 {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: var(--text-hero);
+		font-weight: 400;
+		line-height: var(--leading-hero);
+		letter-spacing: var(--tracking-hero);
+		text-transform: uppercase;
+	}
+
+	.outlined {
+		-webkit-text-stroke: 2px var(--ink);
+		color: transparent;
+	}
+
+	/* Without text-stroke the word would vanish, so fall back to a solid fill. */
+	@supports not (-webkit-text-stroke: 2px black) {
+		.outlined {
+			color: var(--ink);
+		}
+	}
+
+	.subtitle {
+		margin: 18px 0 0;
+		font-size: var(--text-hero-subtitle);
+		font-weight: 700;
+		letter-spacing: 0.02em;
+	}
+
+	.slash {
+		color: var(--accent);
+	}
+
+	.quote {
+		margin-top: 26px;
+	}
+
+	.actions {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 12px;
+		margin-top: 28px;
+	}
+
+	/* ---- Portrait ---------------------------------------------------------- */
+	.portrait {
+		overflow: hidden;
+		/* Reserved up front so the image cannot shift the layout as it loads. */
+		aspect-ratio: 4 / 5;
+	}
+
+	.portrait :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+
+	.caption {
+		position: absolute;
+		left: 0;
+		bottom: 0;
+		background: var(--ink);
+		color: var(--paper);
+		padding: 8px 14px;
+		font-size: var(--text-meta);
+		font-weight: 900;
+		letter-spacing: var(--tracking-caption);
+		pointer-events: none;
+	}
+</style>

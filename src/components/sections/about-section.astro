@@ -1,0 +1,114 @@
+---
+import InkPanel from "~/components/ui/ink-panel.astro";
+import SectionHeading from "~/components/ui/section-heading.astro";
+import SkillChip from "~/components/ui/skill-chip.astro";
+
+const SKILLS = [
+	"React",
+	"TypeScript",
+	"Next.js",
+	"Tailwind",
+	"Astro",
+	"Cursor",
+	"Linear",
+] as const;
+---
+
+<section id="about" aria-labelledby="about-heading">
+	<SectionHeading title="About" id="about-heading" />
+
+	<div class="grid">
+		<InkPanel
+			tone="panel"
+			lift
+			class="bio"
+			style="--panel-lift: var(--lift-about); --panel-shadow-hover: var(--shadow-about-hover);"
+		>
+			<span class="texture texture--dots texture--fade-bottom-left"></span>
+			<p>
+				I'm a software developer focused on building clean, practical
+				applications that solve real problems. I work across the stack, learning
+				new technologies and turning ideas into products with a good balance
+				between functionality and user experience. Most of my projects start
+				from a personal need or plain curiosity — which keeps me constantly
+				experimenting and improving.
+			</p>
+			<div class="skills">
+				{SKILLS.map((skill) => <SkillChip>{skill}</SkillChip>)}
+			</div>
+		</InkPanel>
+
+		<InkPanel
+			tone="ink"
+			lift
+			class="motto"
+			style="--panel-lift: var(--lift-about); --panel-shadow-hover: 12px 12px 0 var(--ink);"
+		>
+			<p class="shout">Ship<br />small.<br />Ship<br />fast.</p>
+			<p class="rule">ONE PUNCH · ONE FEATURE</p>
+		</InkPanel>
+	</div>
+</section>
+
+<style>
+	section {
+		margin-top: var(--section-gap);
+	}
+
+	.grid {
+		display: grid;
+		grid-template-columns: repeat(
+			auto-fit,
+			minmax(min(100%, var(--col-about)), 1fr)
+		);
+		gap: var(--grid-gap);
+	}
+
+	.bio {
+		overflow: hidden;
+		padding: 34px 36px;
+	}
+
+	.bio p {
+		position: relative;
+		margin: 0;
+		font-size: var(--text-about-body);
+		line-height: var(--leading-about-body);
+		max-width: var(--measure-about);
+		text-wrap: pretty;
+	}
+
+	.skills {
+		position: relative;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		margin-top: 28px;
+	}
+
+	/* ---- Motto panel ------------------------------------------------------- */
+	.motto {
+		padding: 30px 28px;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 26px;
+	}
+
+	.shout {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: var(--text-quote);
+		line-height: var(--leading-quote);
+		text-transform: uppercase;
+	}
+
+	.rule {
+		margin: 0;
+		font-size: var(--text-label);
+		font-weight: 700;
+		letter-spacing: var(--tracking-label);
+		border-top: var(--border-chip) solid var(--paper);
+		padding-top: 14px;
+	}
+</style>
