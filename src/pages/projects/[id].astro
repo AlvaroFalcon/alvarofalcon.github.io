@@ -1,0 +1,653 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import { Image, getImage } from "astro:assets";
+import BaseLayout from "~/layouts/base-layout.astro";
+import InkPanel from "~/components/ui/ink-panel.astro";
+import InkButton from "~/components/ui/ink-button.astro";
+import ChapterChip from "~/components/ui/chapter-chip.astro";
+import SkillChip from "~/components/ui/skill-chip.astro";
+import SectionHeading from "~/components/ui/section-heading.astro";
+import { SITE_CONFIG } from "~/lib/site-config";
+
+/*
+ * One page per project, generated from the collection. The header panel
+ * shares its view-transition-name with the project's card on the home page,
+ * so browsers that support cross-document view transitions morph one into
+ * the other.
+ */
+export const getStaticPaths = (async () => {
+	const projects = (await getCollection("projects")).sort(
+		(a, b) => a.data.order - b.data.order
+	);
+	return projects.map((project, i) => ({
+		params: { id: project.id },
+		props: {
+			project,
+			prev: projects[i - 1],
+			next: projects[i + 1],
+		},
+	}));
+}) satisfies GetStaticPaths;
+
+interface Props {
+	project: CollectionEntry<"projects">;
+	prev?: CollectionEntry<"projects"> | undefined;
+	next?: CollectionEntry<"projects"> | undefined;
+}
+
+const { project, prev, next } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+
+const chapter = `CH. ${String(data.order).padStart(2, "0")}`;
+/** Titles carry deliberate line breaks for the cards; the page is roomier. */
+const plainTitle = (title: string) => title.replace(/\n/g, " ");
+
+/*
+ * Animated GIFs go out untouched: the image service would flatten them to
+ * their first frame. Everything else gets a large optimised version for the
+ * lightbox, next to the responsive thumbnail.
+ */
+const gallery = await Promise.all(
+	data.gallery.map(async (shot) => {
+		const animated = shot.src.format === "gif";
+		const full = animated
+			? shot.src.src
+			: (
+					await getImage({
+						src: shot.src,
+						width: Math.min(shot.src.width, 1920),
+						format: "webp",
+					})
+				).src;
+		return { ...shot, animated, full };
+	})
+);
+
+const ogImage = gallery.find((shot) => !shot.animated);
+const ogImageUrl = ogImage
+	? new URL(
+			(
+				await getImage({
+					src: ogImage.src,
+					width: 1200,
+					format: "png",
+				})
+			).src,
+			Astro.site
+		).href
+	: undefined;
+---
+
+<BaseLayout
+	title={`${plainTitle(data.title)} — ${SITE_CONFIG.name}`}
+	description={data.summary}
+	image={ogImageUrl}
+>
+	<nav class="crumbs" aria-label="Breadcrumb">
+		<a href="/#projects">← ALL PROJECTS</a>
+	</nav>
+
+	<InkPanel
+		as="section"
+		tone="paper"
+		class="intro"
+		style={`view-transition-name: project-${project.id}; --panel-shadow: var(--shadow-panel);`}
+		aria-labelledby="project-title"
+	>
+		<span class="texture texture--dots texture--fade-top-left"></span>
+		<div class="intro-content">
+			<div class="meta">
+				<ChapterChip>{chapter}</ChapterChip>
+				<span class="category">{data.category}</span>
+				{data.wip && <span class="tag">WORK IN PROGRESS</span>}
+				{data.private && <span class="tag">PRIVATE REPO</span>}
+			</div>
+
+			<h1 id="project-title">{data.title}</h1>
+			<p class="summary">{data.summary}</p>
+
+			{
+				data.role && (
+					<p class="role">
+						<strong>My role:</strong> {data.role}
+					</p>
+				)
+			}
+
+			<ul class="stack" aria-label="Tech stack">
+				{
+					data.stack.map((tech) => (
+						<li>
+							<SkillChip>{tech}</SkillChip>
+						</li>
+					))
+				}
+			</ul>
+
+			{
+				(data.links.length > 0 || data.private) && (
+					<div class="links">
+						{data.links.map((link, i) => (
+							<InkButton
+								href={link.href}
+								variant={i === 0 ? "solid" : "outline"}
+								size="md"
+								shadow={i === 0}
+							>
+								{link.label.toUpperCase()} ↗
+							</InkButton>
+						))}
+						{data.private && (
+							<p class="private-note">
+								The code is private. Happy to walk through it in an interview.
+							</p>
+						)}
+					</div>
+				)
+			}
+		</div>
+	</InkPanel>
+
+	<InkPanel as="article" tone="panel" class="write-up">
+		<div class="prose">
+			<Content />
+		</div>
+	</InkPanel>
+
+	{
+		gallery.length > 0 && (
+			<section class="gallery-section" aria-labelledby="gallery-heading">
+				<SectionHeading title="Screenshots" id="gallery-heading" />
+				<ul class="gallery">
+					{gallery.map((shot, i) => (
+						<li data-portrait={shot.portrait ? "" : undefined}>
+							<figure>
+								<button
+									type="button"
+									class="shot"
+									data-index={i}
+									data-full={shot.full}
+									data-alt={shot.alt}
+									data-caption={shot.caption ?? ""}
+									aria-label={`Enlarge: ${shot.alt}`}
+								>
+									{shot.animated ? (
+										<img
+											src={shot.full}
+											alt={shot.alt}
+											width={shot.src.width}
+											height={shot.src.height}
+											loading="lazy"
+											decoding="async"
+										/>
+									) : (
+										<Image
+											src={shot.src}
+											alt={shot.alt}
+											widths={[400, 800, 1200]}
+											sizes={
+												shot.portrait
+													? "(max-width: 780px) 50vw, 25vw"
+													: "(max-width: 780px) 100vw, 50vw"
+											}
+											loading="lazy"
+											decoding="async"
+										/>
+									)}
+								</button>
+								{shot.caption && <figcaption>{shot.caption}</figcaption>}
+							</figure>
+						</li>
+					))}
+				</ul>
+			</section>
+		)
+	}
+
+	<nav class="pager" aria-label="More projects">
+		{
+			prev ? (
+				<a href={`/projects/${prev.id}/`} class="pager-link">
+					<span class="pager-label">← PREVIOUS</span>
+					<span class="pager-title">{plainTitle(prev.data.title)}</span>
+				</a>
+			) : (
+				<span />
+			)
+		}
+		{
+			next && (
+				<a href={`/projects/${next.id}/`} class="pager-link is-next">
+					<span class="pager-label">NEXT →</span>
+					<span class="pager-title">{plainTitle(next.data.title)}</span>
+				</a>
+			)
+		}
+	</nav>
+
+	{
+		gallery.length > 0 && (
+			<dialog class="lightbox" aria-label="Screenshot viewer">
+				<div class="lightbox-frame">
+					<img class="lightbox-img" alt="" />
+					<p class="lightbox-caption" />
+				</div>
+				<button type="button" class="lb-btn lb-close" aria-label="Close">
+					✕
+				</button>
+				{gallery.length > 1 && (
+					<>
+						<button
+							type="button"
+							class="lb-btn lb-prev"
+							aria-label="Previous screenshot"
+						>
+							←
+						</button>
+						<button
+							type="button"
+							class="lb-btn lb-next"
+							aria-label="Next screenshot"
+						>
+							→
+						</button>
+					</>
+				)}
+			</dialog>
+		)
+	}
+</BaseLayout>
+
+<script>
+	/*
+	 * Minimal lightbox on a native <dialog>: Esc, focus trapping and the
+	 * backdrop come from the browser. Without JS the thumbnails still show.
+	 */
+	const dialog = document.querySelector<HTMLDialogElement>(".lightbox");
+	const shots = [...document.querySelectorAll<HTMLButtonElement>(".shot")];
+
+	if (dialog && shots.length > 0) {
+		const img = dialog.querySelector<HTMLImageElement>(".lightbox-img")!;
+		const caption = dialog.querySelector<HTMLElement>(".lightbox-caption")!;
+		let current = 0;
+
+		const show = (index: number) => {
+			current = (index + shots.length) % shots.length;
+			const shot = shots[current]!;
+			img.src = shot.dataset.full ?? "";
+			img.alt = shot.dataset.alt ?? "";
+			caption.textContent = shot.dataset.caption || shot.dataset.alt || "";
+		};
+
+		shots.forEach((shot, i) =>
+			shot.addEventListener("click", () => {
+				show(i);
+				dialog.showModal();
+			})
+		);
+
+		dialog
+			.querySelector(".lb-close")
+			?.addEventListener("click", () => dialog.close());
+		dialog
+			.querySelector(".lb-prev")
+			?.addEventListener("click", () => show(current - 1));
+		dialog
+			.querySelector(".lb-next")
+			?.addEventListener("click", () => show(current + 1));
+
+		// A click on the backdrop lands on the dialog element itself.
+		dialog.addEventListener("click", (event) => {
+			if (event.target === dialog) dialog.close();
+		});
+
+		dialog.addEventListener("keydown", (event) => {
+			if (shots.length < 2) return;
+			if (event.key === "ArrowLeft") show(current - 1);
+			if (event.key === "ArrowRight") show(current + 1);
+		});
+
+		// Hand focus back to the thumbnail that opened the viewer.
+		dialog.addEventListener("close", () => shots[current]?.focus());
+	}
+</script>
+
+<style>
+	.crumbs {
+		margin-bottom: 22px;
+		font-size: var(--text-meta);
+		font-weight: 900;
+		letter-spacing: var(--tracking-nav);
+	}
+
+	/* ---- Intro ------------------------------------------------------------ */
+	.intro {
+		overflow: hidden;
+		padding: clamp(24px, 4vw, 44px);
+	}
+
+	.intro-content {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 18px;
+		max-width: 900px;
+	}
+
+	.meta {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 12px;
+	}
+
+	.category {
+		font-size: var(--text-meta);
+		font-weight: 700;
+		letter-spacing: var(--tracking-label);
+		color: var(--accent);
+	}
+
+	.tag {
+		border: var(--border-chip) solid var(--ink);
+		padding: 2px 8px;
+		font-size: var(--text-chip);
+		font-weight: 900;
+		letter-spacing: var(--tracking-chip-label);
+	}
+
+	h1 {
+		font-family: var(--font-display);
+		font-size: var(--text-hero);
+		font-weight: 400;
+		line-height: var(--leading-hero);
+		letter-spacing: var(--tracking-hero);
+		text-transform: uppercase;
+		white-space: pre-line;
+		overflow-wrap: anywhere;
+	}
+
+	.summary {
+		max-width: var(--measure-about);
+		font-size: clamp(17px, 1vw + 12px, var(--text-hero-subtitle));
+		line-height: 1.45;
+		text-wrap: pretty;
+	}
+
+	.role {
+		font-size: var(--text-body);
+		line-height: var(--leading-body);
+	}
+
+	.stack {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 14px;
+		margin-top: 6px;
+	}
+
+	.private-note {
+		font-size: var(--text-body);
+		font-weight: 700;
+	}
+
+	/* ---- Write-up --------------------------------------------------------- */
+	.write-up {
+		margin-top: var(--grid-gap);
+		padding: clamp(24px, 4vw, 44px);
+	}
+
+	.prose {
+		max-width: var(--measure-about);
+		font-size: var(--text-about-body);
+		line-height: var(--leading-about-body);
+	}
+
+	.prose :global(h2) {
+		margin: 1.6em 0 0.4em;
+		font-family: var(--font-display);
+		font-size: clamp(28px, 3.4vw, 40px);
+		font-weight: 400;
+		line-height: var(--leading-display);
+		text-transform: uppercase;
+	}
+
+	.prose :global(h2:first-child) {
+		margin-top: 0;
+	}
+
+	.prose :global(p),
+	.prose :global(ul) {
+		margin: 0 0 1em;
+	}
+
+	.prose :global(ul) {
+		padding-left: 1.2em;
+	}
+
+	.prose :global(li) {
+		margin-bottom: 0.4em;
+	}
+
+	.prose :global(li::marker) {
+		color: var(--accent);
+	}
+
+	.prose :global(strong) {
+		font-weight: 900;
+	}
+
+	.prose :global(code) {
+		padding: 1px 6px;
+		background: var(--paper);
+		border: 1px solid var(--ink);
+		font-size: 0.85em;
+		overflow-wrap: anywhere;
+	}
+
+	.prose :global(a) {
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+	}
+
+	/* ---- Gallery ---------------------------------------------------------- */
+	.gallery-section {
+		margin-top: var(--section-gap);
+	}
+
+	.gallery {
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+		gap: var(--grid-gap);
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	/* Phone screenshots: narrower columns so they don't tower over the page. */
+	.gallery:has(> [data-portrait]) {
+		grid-template-columns: repeat(auto-fill, minmax(min(45%, 200px), 1fr));
+	}
+
+	figure {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		height: 100%;
+	}
+
+	.shot {
+		display: block;
+		width: 100%;
+		padding: 0;
+		border: var(--border-rule) solid var(--ink);
+		background: var(--paper-2);
+		box-shadow: var(--shadow-card);
+		cursor: zoom-in;
+		overflow: hidden;
+		transition:
+			transform var(--duration-lift) var(--ease-lift),
+			box-shadow var(--duration-lift) var(--ease-lift);
+	}
+
+	.shot:hover {
+		transform: translate3d(var(--lift-card), var(--lift-card), 0);
+		box-shadow: var(--shadow-card-hover);
+	}
+
+	.shot :global(img) {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 10;
+		object-fit: cover;
+		object-position: top;
+	}
+
+	[data-portrait] .shot :global(img) {
+		aspect-ratio: 9 / 16;
+	}
+
+	figcaption {
+		font-size: var(--text-label);
+		font-weight: 700;
+		line-height: 1.45;
+	}
+
+	/* ---- Pager ------------------------------------------------------------ */
+	.pager {
+		display: flex;
+		justify-content: space-between;
+		gap: var(--grid-gap);
+		margin-top: var(--section-gap);
+		padding-top: 22px;
+		border-top: var(--border-rule) solid var(--ink);
+	}
+
+	.pager-link {
+		display: flex;
+		flex-direction: column;
+		gap: 6px;
+		max-width: 48%;
+	}
+
+	.pager-link.is-next {
+		margin-left: auto;
+		text-align: right;
+	}
+
+	.pager-label {
+		font-size: var(--text-meta);
+		font-weight: 900;
+		letter-spacing: var(--tracking-nav);
+	}
+
+	.pager-title {
+		font-family: var(--font-display);
+		font-size: clamp(22px, 3vw, 34px);
+		line-height: var(--leading-display);
+		text-transform: uppercase;
+	}
+
+	/* ---- Lightbox --------------------------------------------------------- */
+	.lightbox {
+		width: 100vw;
+		max-width: 100vw;
+		height: 100dvh;
+		max-height: 100dvh;
+		margin: 0;
+		padding: clamp(16px, 4vw, 48px);
+		border: 0;
+		background: transparent;
+		color: var(--paper);
+	}
+
+	.lightbox[open] {
+		display: grid;
+		place-items: center;
+	}
+
+	.lightbox::backdrop {
+		background: rgb(18 16 14 / 0.92);
+	}
+
+	.lightbox-frame {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 14px;
+		max-height: 100%;
+	}
+
+	.lightbox-img {
+		max-width: min(100%, 1600px);
+		max-height: calc(100dvh - 140px);
+		width: auto;
+		height: auto;
+		border: var(--border-panel) solid var(--paper);
+		background: var(--paper-2);
+	}
+
+	.lightbox-caption {
+		max-width: 70ch;
+		font-weight: 700;
+		text-align: center;
+	}
+
+	.lb-btn {
+		position: fixed;
+		display: grid;
+		place-items: center;
+		width: 48px;
+		height: 48px;
+		border: var(--border-rule) solid var(--paper);
+		background: var(--ink);
+		color: var(--paper);
+		font-size: 20px;
+		font-weight: 900;
+		cursor: pointer;
+	}
+
+	.lb-btn:hover {
+		background: var(--accent);
+	}
+
+	.lb-close {
+		top: 16px;
+		right: 16px;
+	}
+
+	.lb-prev,
+	.lb-next {
+		top: 50%;
+		transform: translateY(-50%);
+	}
+
+	.lb-prev {
+		left: 16px;
+	}
+
+	.lb-next {
+		right: 16px;
+	}
+
+	@media (max-width: 640px) {
+		.lb-prev,
+		.lb-next {
+			top: auto;
+			bottom: 16px;
+			transform: none;
+		}
+	}
+</style>
