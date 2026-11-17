@@ -390,6 +390,14 @@ const ogImageUrl = ogImage
 		list-style: none;
 	}
 
+	/*
+	 * The chip is an inline span: inside a list item its vertical padding
+	 * would not take up space, and wrapped rows would overlap.
+	 */
+	.stack li {
+		display: flex;
+	}
+
 	.links {
 		display: flex;
 		flex-wrap: wrap;
