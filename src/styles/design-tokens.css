@@ -85,6 +85,8 @@
 	--col-hero: 420px;
 	--col-about: 360px;
 	--col-projects: 340px;
+	/* Project cards: wide enough that compact cards pair up two per row. */
+	--col-project-cards: 420px;
 	--col-featured: 380px;
 
 	/* ---- Borders --------------------------------------------------------- */

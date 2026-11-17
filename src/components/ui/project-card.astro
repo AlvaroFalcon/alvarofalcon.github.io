@@ -9,15 +9,20 @@ import ChapterChip from "~/components/ui/chapter-chip.astro";
  * entries onto this, so the card never reaches for content itself.
  */
 interface Props {
+	/** Collection id; names the card for the view transition to its page. */
+	slug: string;
 	/** Chapter number, rendered as "CH. 01". */
 	order: number;
 	title: string;
 	category: string;
 	summary: string;
 	stack: string[];
-	/** Absent means unreleased: the CTA becomes an inert COMING SOON marker. */
-	href?: string | undefined;
-	cta?: string | undefined;
+	/** The project's detail page. */
+	href: string;
+	/** Unreleased work gets a WIP tag beside the category. */
+	wip?: boolean;
+	/** Private code gets a PRIVATE tag beside the category. */
+	isPrivate?: boolean;
 	cover?: ImageMetadata | undefined;
 	coverAlt?: string | undefined;
 	screentone?: boolean;
@@ -25,13 +30,15 @@ interface Props {
 }
 
 const {
+	slug,
 	order,
 	title,
 	category,
 	summary,
 	stack,
 	href,
-	cta = "VIEW PROJECT",
+	wip = false,
+	isPrivate = false,
 	cover,
 	coverAlt,
 	screentone = false,
@@ -42,73 +49,103 @@ const isDark = variant === "dark";
 const chapter = `CH. ${String(order).padStart(2, "0")}`;
 ---
 
-<InkPanel
-	as="article"
-	tone={isDark ? "ink" : "panel"}
-	lift
-	class="project-card"
+<a
+	href={href}
+	class="card-link"
 	data-variant={variant}
+	aria-labelledby={`project-${slug}-title`}
 >
-	{
-		variant === "featured" && (
-			<div class="media">
-				<span class="texture texture--speed-lines" />
-				{cover && (
-					<Image
-						src={cover}
-						alt={coverAlt ?? ""}
-						widths={[400, 800, 1200]}
-						sizes="(max-width: 780px) 100vw, 50vw"
-						loading="lazy"
-						decoding="async"
-					/>
-				)}
+	<InkPanel
+		as="article"
+		style={`view-transition-name: project-${slug};`}
+		tone={isDark ? "ink" : "panel"}
+		lift
+		class="project-card"
+		data-variant={variant}
+	>
+		{
+			variant === "featured" && (
+				<div class="media">
+					<span class="texture texture--speed-lines" />
+					{cover && (
+						<Image
+							src={cover}
+							alt={coverAlt ?? ""}
+							widths={[400, 800, 1200]}
+							sizes="(max-width: 780px) 100vw, 50vw"
+							loading="lazy"
+							decoding="async"
+						/>
+					)}
+				</div>
+			)
+		}
+
+		{
+			screentone && (
+				<span
+					class="texture texture--dots texture--fade-top-left"
+					style="--dot-size: 9px;"
+				/>
+			)
+		}
+
+		{/* Keeps the copy as one grid item beside the featured image. */}
+		<div class="content">
+			<div class="head">
+				<div class="meta">
+					<ChapterChip tone={isDark ? "paper" : "ink"}>{chapter}</ChapterChip>
+					<span class="category">{category}</span>
+					{wip && <span class="tag">WIP</span>}
+					{isPrivate && <span class="tag">PRIVATE</span>}
+				</div>
+				<h3 id={`project-${slug}-title`}>{title}</h3>
 			</div>
-		)
-	}
 
-	{
-		screentone && (
-			<span
-				class="texture texture--dots texture--fade-top-left"
-				style="--dot-size: 9px;"
-			/>
-		)
-	}
-
-	{/* Keeps the copy as one grid item beside the featured image. */}
-	<div class="content">
-		<div class="head">
-			<div class="meta">
-				<ChapterChip tone={isDark ? "paper" : "ink"}>{chapter}</ChapterChip>
-				<span class="category">{category}</span>
+			<div class="body">
+				<p class="summary">{summary}</p>
+				<p class="stack">{stack.join(" · ")}</p>
+				{/* A span, not a link: the whole card is already the link. */}
+				<InkButton variant={isDark ? "on-dark" : "outline"} class="cta">
+					VIEW PROJECT →
+				</InkButton>
 			</div>
-			<h3>{title}</h3>
 		</div>
-
-		<div class="body">
-			<p class="summary">{summary}</p>
-			<p class="stack">{stack.join(" · ")}</p>
-			{
-				href ? (
-					<InkButton
-						href={href}
-						variant={isDark ? "on-dark" : "outline"}
-						class="cta"
-					>
-						{cta} →
-					</InkButton>
-				) : (
-					<InkButton dashed class="cta">
-						COMING SOON
-					</InkButton>
-				)
-			}
-		</div>
-	</div>
-</InkPanel>
+	</InkPanel>
+</a>
 
 <style>
+	/*
+	 * The whole card is one link, so it is one big click target and a single
+	 * tab stop. The wrapper takes the card's place in the projects grid.
+	 */
+	.card-link {
+		display: flex;
+		color: inherit;
+	}
+
+	.card-link:hover {
+		color: inherit;
+	}
+
+	.card-link[data-variant="featured"],
+	.card-link[data-variant="dark"] {
+		grid-column: 1 / -1;
+	}
+
+	.card-link > :global(.project-card) {
+		flex: 1;
+	}
+
+	.card-link:focus-visible {
+		outline-offset: 6px;
+	}
+
+	.card-link:hover .cta,
+	.card-link:focus-visible .cta {
+		--button-bg: var(--button-hover-bg);
+		--button-fg: var(--button-hover-fg);
+	}
 	.project-card {
 		position: relative;
 		overflow: hidden;
@@ -147,8 +184,27 @@ const chapter = `CH. ${String(order).padStart(2, "0")}`;
 
 	.meta {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		gap: 12px;
+	}
+
+	.tag {
+		border: var(--border-chip) solid currentColor;
+		padding: 2px 8px;
+		font-size: var(--text-chip);
+		font-weight: 900;
+		letter-spacing: var(--tracking-chip-label);
+	}
+
+	.project-card {
+		--button-hover-bg: var(--ink);
+		--button-hover-fg: var(--paper);
+	}
+
+	.project-card[data-variant="dark"] {
+		--button-hover-bg: var(--paper);
+		--button-hover-fg: var(--ink);
 	}
 
 	.category {
@@ -180,7 +236,6 @@ const chapter = `CH. ${String(order).padStart(2, "0")}`;
 
 	/* ---- Featured: full width, image beside the copy ---------------------- */
 	.project-card[data-variant="featured"] {
-		grid-column: 1 / -1;
 		display: grid;
 		grid-template-columns: repeat(
 			auto-fit,
@@ -215,7 +270,6 @@ const chapter = `CH. ${String(order).padStart(2, "0")}`;
 
 	/* ---- Dark: full width, title opposite the copy ------------------------ */
 	.project-card[data-variant="dark"] {
-		grid-column: 1 / -1;
 		display: grid;
 		grid-template-columns: repeat(
 			auto-fit,

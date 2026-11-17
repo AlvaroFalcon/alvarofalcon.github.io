@@ -3,14 +3,13 @@ export const SITE_CONFIG = {
 	name: "Alvaro Falcón",
 	wordmark: "ALVARO FALCÓN.",
 	initials: "AF",
-	role: "Frontend Developer",
+	role: "Senior Frontend Engineer",
 	tagline: "Full-stack curious",
 	description:
-		"Frontend developer building clean, practical applications across the stack.",
+		"Senior frontend engineer building web and mobile products with React, React Native and TypeScript.",
 	email: "alvaro.falconm93@gmail.com",
 	links: {
-		linkedin:
-			"https://www.linkedin.com/in/alvaro-falc%C3%B3n-morales-158a3b128/",
+		linkedin: "https://www.linkedin.com/in/alvaro-falcon-morales/",
 		github: "https://github.com/AlvaroFalcon",
 	},
 } as const satisfies Record<string, unknown>;

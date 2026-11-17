@@ -13,6 +13,16 @@ html {
 	scroll-behavior: smooth;
 }
 
+/*
+ * Cross-document view transitions: moving between the home page and a
+ * project page cross-fades, and the project card morphs into the page
+ * header (they share a view-transition-name). Zero JS; browsers without
+ * support simply navigate. Reduced motion opts out below.
+ */
+@view-transition {
+	navigation: auto;
+}
+
 body {
 	margin: 0;
 	background: var(--paper);
@@ -61,6 +71,10 @@ a:hover {
 
 /* Nothing on the page depends on motion to be understood. */
 @media (prefers-reduced-motion: reduce) {
+	@view-transition {
+		navigation: none;
+	}
+
 	html {
 		scroll-behavior: auto;
 	}
